@@ -1,0 +1,59 @@
+<main class="comics-section">
+    <div fxFlex fxLayout="column" class="layout-box">
+        <div fxLayout="row wrap" class="comic-wrapper">
+            <div
+                fxFlex="50"
+                fxFlex.md="50"
+                fxFlex.sm="100"
+                fxFlex.xs="100"
+                fxLayout="column"
+                class="comic-box"
+                *ngFor="let comic of comics | async"
+            >
+                <mat-card class="comic-card">
+                    <img
+                        mat-card-image
+                        src="{{ comic.thumbnail.path }}.{{
+                            comic.thumbnail.extension
+                        }}"
+                        alt="{{ comic.title }} image"
+                        class="card-image"
+                    />
+                    <mat-card-header class="card-header">
+                        <mat-card-title>{{ comic.title }}</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content class="card-content">
+                        <h4>{{ dateTitle }}</h4>
+                        <p class="content"></p>
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <button mat-button>Ok</button>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+
+    <!-- <mat-grid-list cols="4" rowHeight="fit">
+        <mat-grid-tile
+            [colspan]="1"
+            [rowspan]="1"
+            *ngFor="let comic of comics | async"
+            fxLayoutAlign="start start"
+        >
+            <span class="content-box">
+                <ng-container class="image-box">
+                    <img src="" alt="" />
+                </ng-container>
+                <span class="content" style="margin: 1rem 0rem">
+                    <h4></h4>
+                    <p style="padding: 1rem 0.5rem"></p>
+                </span>
+
+                <button mat-button class="check-button">
+                    Check the Comic!
+                </button>
+            </span>
+        </mat-grid-tile>
+    </mat-grid-list> -->
+</main>

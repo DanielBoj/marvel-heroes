@@ -1,0 +1,32 @@
+<main class="stories-section">
+    <h3 class="tab-title">{{ storiesSubt }}</h3>
+    <mat-tab-group #storiesTabs dynamicHeight class="tab-box">
+        <ng-container *ngFor="let story of stories | async" class="stories-box">
+            <mat-tab label="{{ story.title }}" class="tab-headers">
+                <span class="content-box">
+                    <ng-container>
+                        <span class="image-box">
+                            <img
+                                src="/assets/img/Marvel_Logo.png"
+                                alt="Marvel Banner"
+                                style="max-width: 10rem; margin: 1rem 0rem"
+                            />
+                        </span>
+                    </ng-container>
+                    <span class="content" style="margin: 1rem 0rem">
+                        <h4>{{ typeSubt }}</h4>
+                        <p style="padding: 1rem 0.5rem">{{ story.type }}</p>
+                    </span>
+
+                    <button
+                        mat-button
+                        class="check-button"
+                        (click)="checkStory(story.resourceURI)"
+                    >
+                        Check the Story!
+                    </button>
+                </span>
+            </mat-tab>
+        </ng-container>
+    </mat-tab-group>
+</main>

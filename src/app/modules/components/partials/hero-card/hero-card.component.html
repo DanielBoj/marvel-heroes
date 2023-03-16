@@ -1,0 +1,30 @@
+<ng-container class="character-card-container" *ngIf="hero.name !== ''">
+    <mat-card class="hero-card">
+        <mat-card-header>
+            <mat-card-title>
+                <h2 class="title">{{ hero.name }}</h2>
+            </mat-card-title>
+        </mat-card-header>
+        <img
+            mat-card-image
+            class="hero-image"
+            src="{{ hero.thumbnail.path }}.{{ hero.thumbnail.extension }}"
+            alt="Image of {{ hero.name }}"
+        />
+        <mat-card-content>
+            <h3 class="subtitle">{{ subDescript }}</h3>
+            <p class="content">
+                {{ hero.description }}
+            </p>
+            <h3 class="subtitle">{{ subAparicion }}</h3>
+            <p class="content">
+                {{ hero.modified }}
+            </p>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button class="get-button" (click)="getHero(hero.id)">
+                Details
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</ng-container>

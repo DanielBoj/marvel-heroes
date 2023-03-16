@@ -1,1 +1,39 @@
-<p>footer works!</p>
+<section>
+    <mat-grid-list class="footer-menu-container" cols="6" rowHeight="3:1">
+        <mat-grid-tile class="copyright" colspan="2"
+            >CC0-1.0 2023</mat-grid-tile
+        >
+        <mat-grid-tile class="social" colspan="4">
+            <a href="https://www.marvel.com">
+               <fa-icon
+                    class="social-icon"
+                    [icon]="['fab', 'twitter']"
+                    size="2x"
+                    [transform]="isHovered ? 'grow-3 up-2' : 'grow-0'"
+                    (mouseenter)="isHovered = true"
+                    (mouseleave)="isHovered = false"
+                />
+            </a>
+
+            <a href="https://www.marvel.com">
+                <fa-icon
+                class="social-icon"
+                [icon]="['fab', 'facebook']"
+                size="2x"
+                [transform]="isHovered ? 'grow-3 up-2' : 'grow-0'"
+                (mouseenter)="isHovered = true"
+                (mouseleave)="isHovered = false"
+            />
+            </a>
+            <a href="https://www.marvel.com">
+                <fa-icon
+                    [icon]="['fab', 'instagram']"
+                    size="2x"
+                    [transform]="isHovered ? 'grow-3 up-2' : 'grow-0'"
+                    (mouseenter)="isHovered = true"
+                    (mouseleave)="isHovered = false"
+                />
+             </a>
+        </mat-grid-tile>
+    </mat-grid-list>
+</section>

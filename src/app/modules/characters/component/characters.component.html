@@ -1,0 +1,27 @@
+<main class="main-grid">
+    <header class="section-header">
+        <mat-grid-list class="title" cols="2" rowHeight="15vh">
+            <mat-grid-tile class="title" colspan="1">
+                <h2 mat-title>{{ title }}</h2>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2">
+                <h3>{{ subtitle }}</h3>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </header>
+    <!-- Enlazamos el elemento del componente hijo con el componente padre -->
+    <app-search></app-search>
+
+    <ng-container *ngFor="let character of allCharacters | async">
+        <div
+            class="hero-card-container"
+            *ngIf="
+                searchValue === '' ||
+                character.name.toLowerCase().includes(searchValue.toLowerCase())
+            "
+        >
+            <!-- <app-hero-card></app-hero-card> -->
+        </div>
+    </ng-container>
+    <app-hero-card [hero]="hero"></app-hero-card>
+</main>

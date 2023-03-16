@@ -1,0 +1,30 @@
+// Imports
+@use "/src/app/styles/variables" as root
+
+.main-header
+    position: sticky
+    padding: 0 2rem
+    .mat-toolbar
+        flex-wrap: wrap
+        height: 10vh
+        justify-content: space-between
+        align-content: center
+        background-color: root.$background-dark-color
+        .banner
+            width: 50%
+            height: fit-content
+        .menu
+            button
+                width: 8rem
+                height: inherit
+                background-color: root.$background-dark-medium-color
+                margin: 0 0.5rem
+                font-size: 1rem
+                font-weight: 600
+                box-shadow: 0px 2px root.$border-light-color
+                a
+                    color: root.$font-light-color
+                    text-decoration: none
+                    &:hover
+                        color: root.$font-rose-color
+                        text-decoration: none

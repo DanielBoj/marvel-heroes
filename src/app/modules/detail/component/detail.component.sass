@@ -1,0 +1,36 @@
+// Imports
+@use "/src/app/styles/variables" as root
+
+.header
+    position: sticky
+    top: 0
+    margin: -3rem 0 3rem 0
+    z-index: 999
+
+.footer
+    margin-top: 5rem
+
+.detail-content
+    background-color: root.$background-dark-color
+    padding: 1rem 4rem
+    .hero-card
+        background-color: root.$background-dark-medium-color
+        min-height: 50vh
+        padding: 1rem 4rem
+        border: root.$card-border
+        .mat-mdc-card-header
+            border-bottom: 0.3rem solid root.$border-rose-color
+            margin-bottom: 1.5rem
+        .hero-image
+            max-width: 20rem
+            height: auto
+            object-fit: cover
+        .mat-mdc-card-content
+            padding: 1rem
+            .content
+                padding: 0rem 0.5rem
+                line-height: 1.5rem
+        .get-button
+            background-color: root.$background-light-color
+            color: root.$font-high-dark-color
+            box-shadow: root.$box-shadow

@@ -1,0 +1,25 @@
+// Imports
+@use "/src/app/styles/variables" as root
+
+// General
+h3, h4
+    color: root.$font-rose-color
+
+p
+    color: root.$font-light-color
+
+.tab-box
+    background-color: root.$popup-background-color-transparent
+    padding: 1rem 2rem
+    .mat-mdc-tab-group
+        min-height: 40vh
+        .stories-box
+            padding: 1rem 2rem
+            .mat-mdc-tab-body-wrapper
+                padding: 1rem
+
+    .check-button
+        background-color: root.$background-light-color
+        margin-bottom: 1rem
+        box-shadow: root.$box-shadow
+        color: root.$font-high-dark-color

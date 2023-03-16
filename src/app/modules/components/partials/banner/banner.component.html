@@ -1,1 +1,18 @@
-<p>banner works!</p>
+<!-- Path: src\app\modules\components\partials\banner\banner.component.ts -->
+<mat-grid-list
+    class="banner-container"
+    cols="5"
+    rowHeight="3rem"
+    gutterSize="0px"
+>
+    <mat-grid-tile [colspan]="2" [rowspan]="1"
+        ><img
+            src="/assets/img/Marvel_Logo.png"
+            alt="Marvel Logo Banner"
+            class="banner-img"
+        />
+    </mat-grid-tile>
+    <mat-grid-tile class="banner-text" [colspan]="3" [rowspan]="1">
+        <h1 mat-headline class="banner-title">Marvel Heroes</h1>
+    </mat-grid-tile>
+</mat-grid-list>

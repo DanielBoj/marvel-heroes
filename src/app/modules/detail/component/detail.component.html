@@ -1,0 +1,40 @@
+<header class="header">
+    <app-header></app-header>
+</header>
+<main class="detail-content" *ngIf="hero">
+    <ng-container class="character-card-container">
+        <mat-card class="hero-card">
+            <mat-card-header>
+                <mat-card-title>
+                    <h2 class="title">{{ hero.name }}</h2>
+                </mat-card-title>
+            </mat-card-header>
+            <img
+                mat-card-image
+                class="hero-image"
+                src="{{ hero.thumbnail }}"
+                alt="Image of {{ hero.name }}"
+            />
+            <mat-card-content class="details">
+                <h3 class="subtitle">{{ descSubt }}</h3>
+                <p class="content">{{ hero.description }}</p>
+                <h3 class="subtitle">{{ appearanceSubt }}</h3>
+                <p class="content">{{ modifiedStringDate }}</p>
+                <section class="tab-box">
+                    <app-stories></app-stories>
+                </section>
+            </mat-card-content>
+            <mat-card-actions align="end">
+                <button mat-button class="get-button">Back</button>
+            </mat-card-actions>
+        </mat-card>
+    </ng-container>
+
+    <section class="comics-section">
+        <app-comics></app-comics>
+    </section>
+</main>
+
+<footer class="footer">
+    <app-footer></app-footer>
+</footer>

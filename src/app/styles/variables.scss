@@ -1,0 +1,42 @@
+/* FONTS */
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap");
+
+/* FONT FAMILIES */
+$f-raleway: Raleway, sans-serif;
+$f-jetbrains: JetBrains Mono, monospace;
+
+/* FONT COLORS */
+$font-light-color: #eaeff2;
+$font-dark-color: rgb(22, 22, 22);
+$font-high-dark-color: #030303;
+$font-medium-color: #9388a2;
+$font-rose-color: #e6c2bf;
+$font-red-color: #ff1500;
+
+/* BACKGROUND COLORS */
+$background-light-color: #eaeff2;
+$background-dark-color: #030303;
+$background-dark-color-transparent: #03030390;
+$background-dark-medium-color: #0a0a0a;
+$background-dark-medium-color-trasparent: #0a0a0a90;
+$background-medium-color: #040404;
+$popup-background-color: #1e1e1e;
+$popup-background-color-transparent: #1e1e1e90;
+$popup-background-light-color-transparent: #e6c2bf05;
+
+/* BORDER COLORS */
+$border-light-color: #e6c2bf;
+$border-light-color-transparent: #e6c2bf05;
+$border-dark-color: #0a0a0a;
+$border-light-red-color: #ff000080;
+$border-rose-color: #e6c2bf;
+
+/* BUTTON COLORS */
+$but-background-medium-color: #0a0a0a;
+
+/* BORDERS */
+$card-border: 3px dashed $border-light-red-color;
+
+/* SHADOWS */
+$box-shadow: 5px 5px 4px $border-light-color;
