@@ -3,6 +3,7 @@
 * Usa los servicios de conexión a la API de Marvel y de compartir datos entre componentes.
 * Implementa lógica para el autocompletado de las opciones de búsqueda.
 * igualmente, pasa a los servicios de la API los parámetros opcionales para la búsqueda.
+*Para evitar saturar la API, solo re realizará la búsqueda al presionar el icono de búsqueda o enter.
 */
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -30,23 +31,24 @@ export class SearchComponent implements OnInit, OnDestroy {
     isHovered: boolean = false;
 
     // Observable para almacenar los nombres de los personajes
-    namesOpt?: Observable<string[]>;
+    namesOpt: string[] = new Array();
+    // Total de personajes según la docu de Marvel
+    limit: number = 1562;
+    // Controlador de carga
+    isLoading: boolean = true;
 
     // Observable para almacenar los nombres de los personajes filtrados
-    filteredNames?: Observable<string[]>;
+    filteredNames: Observable<string[]> = new Observable();
 
     // Controlador para el input de búsqueda
-    search: FormControl = new FormControl('');
-
-    // Variable para almacenar el valor del input de búsqueda
-    heroName: string = '';
+    search: FormControl = new FormControl();
 
     // Observable para almacenar los datos del personaje retornados por la API
-    hero?: Observable<Result>;
-    heroId?: number;
+    hero: Observable<Result> = new Observable();
+    heroId: Observable<number> = new Observable();
 
     // String para implementar la búsqueda filtrada
-    options?: string[];
+    //options?: string[];
 
     // Controlamos el incio de las llamadas a la API
     private subjectKeyUp = new Subject<any>();
@@ -61,36 +63,19 @@ export class SearchComponent implements OnInit, OnDestroy {
 
         this.cache = this.dataService.cache ? this.dataService.cache : {} as SearchCache;
 
-        this.restoreSearch();
+        // Obtenemos los nombres de los personajes
+        this.getNames();
 
-        // Comprobamos si el usuario ha introducido un valor en el input de // búsqueda y añadimos condiciones para gestionar las llamadas a la API
-        this.subjectKeyUp.pipe((
-            debounceTime(600),
+        // Obtenemos los datos del personaje seleccionado del componente hijo
+        if (this.dataService.getHeroId()) {
 
-            // Solo actualiza el valor si cambia
-            distinctUntilChanged((prev, next) => prev === next)),
-        ).subscribe((value) => {
-            // Comprobamos si el valor introducido por el usuario es un string vacío
-            if (value === '') {
-                // Si el valor es un string vacío, no hacemos nada
-                return;
-            } else {
-                // Si el valor no es un string vacío, obtenemos los datos del personaje
-                this.getHero(value);
+            // Obtenemos el ID del personaje
+            this.heroId = this.dataService.getHeroId();
 
-                // Compartimos los datos del personaje con el componente padre
-                this.dataService.setHero(this.hero as unknown as Result);
+            // Obtenemos los datos del personaje
+            this.getHeroById(Number(this.heroId));
+        }
 
-                // Guardamos la cache
-                if (this.heroId !== undefined) {
-                    this.cache.id = this.heroId;
-                    console.log(this.cache);
-                }
-            }
-        });
-
-        // Reinicializamos el observable con los nombres de los personajes
-        this.filteredNames = this.namesOpt;
 
         // Filtramos los nombres de los personajes
         this.filteredNames = this.search.valueChanges
@@ -98,17 +83,40 @@ export class SearchComponent implements OnInit, OnDestroy {
                 map(value => this._filter(value))
             );
 
-        // Obtenemos la ID del personaje
-        this.dataService.getHero().subscribe(hero => {
-            this.heroId = hero.id;
-            // Descomentar para testar
-            // console.log(hero.id);
+        // Comprobamos si el usuario ha introducido un valor en el input de // búsqueda y añadimos condiciones para gestionar las llamadas a la API
+        this.subjectKeyUp.pipe((
+            debounceTime(600),
+
+            // Solo actualiza el valor si cambia
+            distinctUntilChanged()),
+        ).subscribe((value) => {
+            // Comprobamos si el valor introducido por el usuario es un string vacío
+            if (value === '' || value === undefined || value === null || !this.namesOpt.map((name: string) => name.toLowerCase()).includes(value.toLowerCase())) {
+                // Si el valor es un string vacío, no hacemos nada
+                return;
+            } else {
+                //Si el valor no es un string vacío, actualizamos el nombre del héroe
+
+                // Obtenemos los datos del personaje
+
+                const hero = this.marvelService.getHero(value).subscribe((hero: any) => {
+                    this.hero = hero;
+                    let heroData: Result = {} as Result;
+                    heroData = hero as unknown as Result;
+                    this.hero.forEach((hero: any) => {
+                        heroData = hero;
+                    });
+
+                    // Compartimos los datos del personaje con el componente padre
+                    this.dataService.setHero(heroData);
+                });
+            }
         });
     }
 
     ngOnDestroy(): void {
         this.subjectKeyUp.unsubscribe();
-        this.dataService.cache = this.cache;
+        //this.dataService.cache = this.cache;
     }
 
     // Controlador para el input de búsqueda
@@ -117,37 +125,27 @@ export class SearchComponent implements OnInit, OnDestroy {
         const filterValue = value.toLowerCase();
 
         // // Filtramos los nombres de los personajes
-        this.getNames(filterValue);
-        return this.options?.filter(option => option.toLowerCase().includes(filterValue));
+        return this.namesOpt.filter(option => option.toLowerCase().includes(filterValue));
 
     }
 
     // Método para obtener los nombres de los héroes a través del servicio de Marvel
-    getNames = async (name: string) => {
+    getNames = () => {
+        // Controlamos el inicio de la llamada a la API
+        let count: number = 0;
 
-        if (name !== '') {
+        while (count < 100 /*this.limit*/) {
             // Obtenemos los nombres de los héroes
-            this.namesOpt = await this.marvelService.getName(name).subscribe((names: string[]) => {
-                this.options = names as string[];
+            this.marvelService.getAllNames(count.toString()).subscribe((names: string[]) => {
+
+                // Añadimos los nombres de los personajes a uan lista
+                this.namesOpt = this.namesOpt.concat(names as string[]);
+
                 // Uncoment to test
-                //console.log(names);
+                // console.log(this.namesOpt);
             });
-            this.subjectKeyUp.next(name);
-        }
+            count += 100;
 
-    }
-
-    getHero = async (name: string) => {
-        if (name !== '') {
-            this.hero = await this.marvelService.getHero(name)
-                .subscribe((hero: any) => {
-                    this.hero = hero;
-
-                    // Uncoment to test
-                    // console.log(hero);
-                });
-        } else {
-            return;
         }
     }
 
@@ -165,25 +163,17 @@ export class SearchComponent implements OnInit, OnDestroy {
         }
     }
 
-    onSearch = (name: string) => {
-
+    onFilter = (name: string) => {
         if (name !== '') {
-            // Obtenemos el personaje
-            name.toLowerCase;
-            // Uncoment to test
-            // console.log(name);
-
-            // Controlamos el inicio de la llamada a la API
+            // Actualizamos el valor del input de búsqueda a través del controlador
+            name.toLowerCase();
             this.subjectKeyUp.next(name);
         } else {
             return;
         }
     }
 
-    restoreSearch = () => {
-        console.log(`trying to restore search with id: ${this.cache.id}`);
-        if (this.cache.id > 0) {
-            this.getHeroById(this.cache.id);
-        }
+    showFilter = (opt: string) => {
+        return opt ? opt : '';
     }
 }

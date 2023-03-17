@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 // Router
 import { RouterModule } from '@angular/router';
@@ -13,7 +15,11 @@ import { PartialsModule } from "../components/partials/partials.module";
 import { ComicsComponent } from './comics/comics.component';
 import { StoriesComponent } from './stories/stories.component';
 
+// Gestión del flex
 import { FlexLayoutModule } from '@angular/flex-layout';
+
+// Font Awesome
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 
@@ -31,7 +37,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
         RouterModule,
         MaterialModule,
         PartialsModule,
-        FlexLayoutModule
+        FlexLayoutModule,
+        FontAwesomeModule,
+        FormsModule,
+        ReactiveFormsModule,
     ]
 })
 export class DetailModule { }

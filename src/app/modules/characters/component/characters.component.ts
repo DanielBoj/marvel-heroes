@@ -5,7 +5,8 @@ import { concatMap, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/o
 // Modelos de interfaces
 import { Category, MarvelRequestOptions } from 'src/app/core/interfaces/marvelRequestModel';
 import { ImageVariant } from 'src/app/core/interfaces/marvelImageModel';
-import { Response, Data, MarvelCache, Result } from 'src/app/core/interfaces/marvelResponseModel';
+import { Response, Data, Result } from 'src/app/core/interfaces/marvelResponseModel';
+import { MarvelCache } from 'src/app/core/interfaces/marvelCacheModel';
 
 // Servicio para obtener los datos de la API de Marvel
 import { MarvelService } from 'src/app/services/marvel.service';
@@ -23,8 +24,8 @@ import { Router } from '@angular/router';
 export class CharactersComponent implements OnInit {
 
     // Variables para el título y subtítulo de la página
-    title = 'En tiempos de necesidad...';
-    subtitle = '¡Busca a tus héroes favoritos!';
+    title = 'In times of despair...';
+    subtitle = '¡Search for your destined saviour!';
 
     // Observable para almacenar los personajes
     allCharacters?: Observable<Result> | any;

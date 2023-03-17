@@ -29,7 +29,7 @@ export interface Result {
     id: number; // Identificador del elemento
     name: string; // Nombre del elemento
     description: string; // Descripción del elemento
-    modified: Date; // Fecha de modificación
+    modified: Date | string; // Fecha de modificación
     thumbnail: Thumbnail // Imagen del elemento
     resourceURI: string; // URL del elemento
     comics: Comics; // Comics en los que aparece el elemento
@@ -91,27 +91,16 @@ export enum URLType {
     Wiki = 'wiki',
 }
 
-
-
-export interface MarvelCache {
-    characters?: Result[];
-    comics?: Comic[];
-    creators?: Data;
-    events?: Data;
-    series?: Data;
-    stories?: Story[];
-}
-
-export interface HeroData {
-    id: number; // Identificador del elemento
-    name: string; // Nombre del elemento
-    description: string; // Descripción del elemento
-    modified: Date; // Fecha de modificación
-    thumbnail: string // Imagen del elemento
-    resourceURI: string; // URL del elemento
-    comics: Array<any>; // Comics en los que aparece el elemento
-    series: Array<any>; // Series en las que aparece el elemento
-    stories: Array<any>; // Historias en las que aparece el elemento
-    events: Array<any>; // Eventos en los que aparece el elemento
-    urls: string; // URLs del elemento
-}
+// export interface HeroData {
+//     id: number; // Identificador del elemento
+//     name: string; // Nombre del elemento
+//     description: string; // Descripción del elemento
+//     modified: Date | string; // Fecha de modificación
+//     thumbnail: string // Imagen del elemento
+//     resourceURI: string; // URL del elemento
+//     comics: Array<any>; // Comics en los que aparece el elemento
+//     series: Array<any>; // Series en las que aparece el elemento
+//     stories: Array<any>; // Historias en las que aparece el elemento
+//     events: Array<any>; // Eventos en los que aparece el elemento
+//     urls: string; // URLs del elemento
+// }

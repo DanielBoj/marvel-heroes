@@ -70,7 +70,7 @@ export interface ComicSummary {
 
 export interface ComicDate {
     type: string;
-    date: Date;
+    date: Date | string;
 }
 
 export interface ComicPrice {

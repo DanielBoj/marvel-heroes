@@ -8,22 +8,25 @@
                 [transform]="isHovered ? 'grow-3 up-2' : 'grow-0'"
                 (mouseenter)="isHovered = true"
                 (mouseleave)="isHovered = false"
-                (click)="onSearch(searchInput.value)"
-            />
+                (click)="onFilter(searchInput.value)"
+                />
             </mat-grid-tile>
             <mat-grid-tile class="search" colspan="6">
                 <mat-form-field class="search-field" color="accent">
-                    <mat-label>Nombre del Héroe</mat-label>
+                    <mat-label>Search your Hero!</mat-label>
                     <input type="text"
-                        matInput placeholder="Search"
-
+                        matInput placeholder="search"
+                        value=""
                         [matAutocomplete]="auto"
                         [formControl]="search"
-                        (keyup)="onSearch(searchInput.value)"
-                        (click)="onSearch(searchInput.value)"
+
+                        (keyup.enter)="onFilter(searchInput.value)"
+
+
                         #searchInput
                         />
-                    <mat-autocomplete #auto="matAutocomplete">
+                    <mat-autocomplete #auto="matAutocomplete"
+                    s>
                         <mat-option *ngFor="let name of filteredNames | async" [value]="name">{{name}}</mat-option>
                     </mat-autocomplete>
                 </mat-form-field>
@@ -31,5 +34,6 @@
         </mat-grid-list>
         <ng-container></ng-container>
 </form>
-
-<!-- [(ngModel)]="heroName" -->
+<!-- (click)="onFilter(searchInput.value)" -->
+<!-- (click)="onFilter(searchInput.value)"
+                        (keyup.enter)="onFilter(searchInput.value)" -->

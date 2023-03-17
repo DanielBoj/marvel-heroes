@@ -31,14 +31,12 @@ export class StoriesComponent implements OnInit {
     typeSubt: string = 'Story Type';
 
     // Objeto para almacenar las historias
-    stories?: Observable<Array<Story>>;
+    stories: Observable<Array<Story>> = new Observable();
 
     constructor(private activatedRoute: ActivatedRoute, private marvelService: MarvelService, private router: Router) {
 
         // Capturamos el parámetro de la URL
-        this.activatedRoute.params.subscribe(params => {
-            this.heroId = params['id'];
-        })
+        this.getIdFromParams();
     }
 
 
@@ -56,6 +54,12 @@ export class StoriesComponent implements OnInit {
 
     checkStory = (url: string) => {
         this.router.navigate([`${url}${this.url}`]);
+    }
+
+    getIdFromParams = () => {
+        this.activatedRoute.params.subscribe(params => {
+            this.heroId = params['id'];
+        })
     }
 
 }

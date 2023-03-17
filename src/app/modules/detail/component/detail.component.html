@@ -1,37 +1,60 @@
 <header class="header">
     <app-header></app-header>
 </header>
-<main class="detail-content" *ngIf="hero">
-    <ng-container class="character-card-container">
+<main class="detail-content">
+    <ng-container
+        class="character-card-container"
+        *ngFor="let hero of hero | async"
+    >
         <mat-card class="hero-card">
             <mat-card-header>
                 <mat-card-title>
-                    <h2 class="title">{{ hero.name }}</h2>
+                    <h2 class="mat-title">{{ hero.name }}</h2>
                 </mat-card-title>
             </mat-card-header>
             <img
                 mat-card-image
                 class="hero-image"
-                src="{{ hero.thumbnail }}"
+                src="{{ hero.thumbnail.path }}.{{ hero.thumbnail.extension }}"
                 alt="Image of {{ hero.name }}"
             />
             <mat-card-content class="details">
-                <h3 class="subtitle">{{ descSubt }}</h3>
+                <h3 class="mat-subhead">{{ descSubt }}</h3>
                 <p class="content">{{ hero.description }}</p>
-                <h3 class="subtitle">{{ appearanceSubt }}</h3>
-                <p class="content">{{ modifiedStringDate }}</p>
+                <h3 class="mat-subhead">{{ appearanceSubt }}</h3>
+                <p class="content">{{ hero.modified }}</p>
+                <h3 class="mat-subhead">Total number of comics</h3>
+                <p class="content">{{ hero.comics.available }}</p>
                 <section class="tab-box">
                     <app-stories></app-stories>
                 </section>
             </mat-card-content>
-            <mat-card-actions align="end">
-                <button mat-button class="get-button">Back</button>
+            <mat-card-actions align="start">
+                <button
+                    mat-button
+                    class="check-button"
+                    type="button"
+                    (click)="checkHero(hero.urls[0].url)"
+                >
+                    More Information!
+                </button>
             </mat-card-actions>
         </mat-card>
     </ng-container>
 
     <section class="comics-section">
         <app-comics></app-comics>
+    </section>
+
+    <section class="nav-box">
+        <button
+            mat-button
+            class="back-button"
+            type="button"
+            (click)="getBack()"
+        >
+            Back
+        </button>
     </section>
 </main>
 

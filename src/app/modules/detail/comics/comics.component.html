@@ -1,6 +1,38 @@
 <main class="comics-section">
-    <div fxFlex fxLayout="column" class="layout-box">
-        <div fxLayout="row wrap" class="comic-wrapper">
+    <section class="filter-box">
+        <fa-icon
+                class="glass-icon"
+                [icon]="['fas', 'magnifying-glass']"
+                size="2x"
+                [transform]="isHovered ? 'grow-3 up-2' : 'grow-0'"
+                (mouseenter)="isHovered = true"
+                (mouseleave)="isHovered = false"
+                (click)="onFilter(filterInput.value)"
+            />
+        <mat-form-field class="search-field" color="accent">
+            <input
+            type="text"
+            matInput
+            [matAutocomplete]="auto"
+            [formControl]="filter"
+            placeholder="filter"
+            value=""
+            (keyup)="onFilter(filterInput.value)"
+            (click)="onFilter(filterInput.value)"
+            #filterInput  />
+            <mat-autocomplete
+            #auto="matAutocomplete"
+            [displayWith]="showFilter">
+                <mat-option
+                *ngFor="let option of filteredOpts | async"
+                [value]="option">
+                    {{option}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </section>
+    <section fxFlex fxLayout="column" class="layout-box">
+        <article fxLayout="row wrap" class="comic-wrapper">
             <div
                 fxFlex="50"
                 fxFlex.md="50"
@@ -24,15 +56,17 @@
                     </mat-card-header>
                     <mat-card-content class="card-content">
                         <h4>{{ dateTitle }}</h4>
+                        <p>{{ comic.dates[0].date }}</p>
                         <p class="content"></p>
                     </mat-card-content>
                     <mat-card-actions>
-                        <button mat-button>Ok</button>
+                        <button mat-button
+                        (click)="checkComic(comic.urls[0].url)">Check Comic!</button>
                     </mat-card-actions>
                 </mat-card>
             </div>
-        </div>
-    </div>
+        </article>
+    </section>
 
     <!-- <mat-grid-list cols="4" rowHeight="fit">
         <mat-grid-tile
@@ -57,3 +91,6 @@
         </mat-grid-tile>
     </mat-grid-list> -->
 </main>
+
+<!-- <mat-option *ngFor="let format of formats | async" [value]="format">{{format}} -->
+<!-- (click)="onFilter(filter.value)" -->
