@@ -7,8 +7,8 @@
 */
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subject, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs/operators';
 
 // Formularios
 import { FormControl } from '@angular/forms';
@@ -18,7 +18,6 @@ import { Result } from 'src/app/core/interfaces/marvelResponseModel';
 // Importamos el servicio para obtener los datos de los personajes
 import { DataService } from 'src/app/services/data.service';
 import { MarvelService } from 'src/app/services/marvel.service';
-import { SearchCache } from 'src/app/core/interfaces/pageCacheModel';
 
 @Component({
     selector: 'app-search',
@@ -45,23 +44,16 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     // Observable para almacenar los datos del personaje retornados por la API
     hero: Observable<Result> = new Observable();
+    heroes: Observable<Result[]> = new Observable();
     heroId: Observable<number> = new Observable();
 
-    // String para implementar la búsqueda filtrada
-    //options?: string[];
-
     // Controlamos el incio de las llamadas a la API
-    private subjectKeyUp = new Subject<any>();
-
-    // Caché última búsqueda
-    private cache: SearchCache = {} as SearchCache;
+    private subjectKeyDown = new Subject<any>();
 
 
     constructor(private marvelService: MarvelService, private dataService: DataService) { }
 
     ngOnInit(): void {
-
-        this.cache = this.dataService.cache ? this.dataService.cache : {} as SearchCache;
 
         // Obtenemos los nombres de los personajes
         this.getNames();
@@ -82,43 +74,10 @@ export class SearchComponent implements OnInit, OnDestroy {
             .pipe(startWith(''),
                 map(value => this._filter(value))
             );
-
-        // Comprobamos si el usuario ha introducido un valor en el input de // búsqueda y añadimos condiciones para gestionar las llamadas a la API
-        this.subjectKeyUp.pipe((
-            debounceTime(600),
-
-            // Solo actualiza el valor si cambia
-            distinctUntilChanged()),
-        ).subscribe((value) => {
-            // Comprobamos si el valor introducido por el usuario es un string vacío
-            if (value === '' || value === undefined || value === null || !this.namesOpt.map((name: string) => name.toLowerCase()).includes(value.toLowerCase())) {
-                // Si el valor es un string vacío, no hacemos nada
-                return;
-            } else {
-                //Si el valor no es un string vacío, actualizamos el nombre del héroe
-
-                // Obtenemos los datos del personaje
-
-                const hero = this.marvelService.getHero(value).subscribe((hero: any) => {
-                    this.hero = hero;
-                    let heroData: Result = {} as Result;
-
-                    this.hero.forEach((hero: any) => {
-                        heroData = hero;
-                    });
-
-                    // Compartimos los datos del personaje con el componente padre
-                    this.dataService.setHero(heroData);
-
-                    // Actualizamos el id del personaje
-                    this.dataService.setHeroId(heroData.id);
-                });
-            }
-        });
     }
 
     ngOnDestroy(): void {
-        this.subjectKeyUp.unsubscribe();
+        this.subjectKeyDown.unsubscribe();
         //this.dataService.cache = this.cache;
     }
 
@@ -148,8 +107,10 @@ export class SearchComponent implements OnInit, OnDestroy {
                 // console.log(this.namesOpt);
             });
             count += 100;
-
         }
+
+        // Controlamos el fin de la llamada a la API
+        this.isLoading = false;
     }
 
     getHeroById = async (id: number) => {
@@ -170,7 +131,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         if (name !== '') {
             // Actualizamos el valor del input de búsqueda a través del controlador
             name.toLowerCase();
-            this.subjectKeyUp.next(name);
+            //this.subjectKeyDown.next(name);
         } else {
             return;
         }
@@ -178,5 +139,24 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     showFilter = (opt: string) => {
         return opt ? opt : '';
+    }
+
+    onChange = (event: any) => {
+
+        // LLamar al método para obtener los datos del personaje
+        this.heroes = this.marvelService.getHero(event.target.value)
+            .pipe((
+                debounceTime(600)),
+                distinctUntilChanged(),
+            ).subscribe((hero: any) => {
+                this.heroes = hero;
+
+                // Enviamos los datos del personaje al servicio de datos
+                this.dataService.setHero(hero);
+            }
+            );
+
+        // Uncoment to test
+        // console.log(event.target.value);
     }
 }

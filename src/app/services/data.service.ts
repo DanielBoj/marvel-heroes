@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { Result } from '../core/interfaces/marvelResponseModel';
-import { SearchCache } from '../core/interfaces/pageCacheModel';
 
 
 @Injectable({
@@ -9,32 +8,30 @@ import { SearchCache } from '../core/interfaces/pageCacheModel';
 })
 export class DataService {
 
-    sourceHero: BehaviorSubject<Result> = new BehaviorSubject<Result>({ name: '', id: 0 } as Result);
+    sourceHero: BehaviorSubject<Result[]> = new BehaviorSubject<Result[]>(undefined as unknown as Result[]);
 
-    currentHero: Observable<Result> = this.sourceHero.asObservable();
+    currentHero: Observable<Result[]> = this.sourceHero.asObservable();
 
     sourceHeroId: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
     currentHeroId: Observable<number> = 0 as unknown as Observable<number>;
 
-    cache?: SearchCache;
 
     constructor() { }
 
-    setHero(hero: Result) {
+    setHero(hero: Result[]) {
         // Solo actualizamos el valor si el id no es el default
-        if (hero.id > 0) {
+        if (hero[0].id > 0) {
             this.sourceHero.next(hero)
         }
 
         // Descomentar para testar
-        // console.log(this.sourceHero);
-
-        this.currentHeroId = hero.id as unknown as Observable<number>;
+        console.log(this.sourceHero);
     }
 
     getHero() {
-        return this.currentHero as Observable<Result>;
+        console.log(this.currentHero);
+        return this.currentHero;
     }
 
     setHeroId(heroId: number) {

@@ -28,10 +28,10 @@ export class CharactersComponent implements OnInit {
     subtitle = 'Search for your destined saviour!';
 
     // Observable para almacenar los personajes
-    allCharacters?: Observable<Result> | any;
+    //allCharacters?: Observable<Result[]> | any;
 
     // Variable para almacenar los datos de un personaje obtenidor por la API
-    hero: Result = {} as Result;
+    allHeroes: Observable<Result[]> = new Observable();
     heroId?: number;
 
     // Opciones de la petición a la API
@@ -49,10 +49,7 @@ export class CharactersComponent implements OnInit {
     ngOnInit(): void {
 
         // Obtenemos los datos del personaje seleccionado del componente hijo
-        this.dataService.getHero().subscribe(hero => {
-            this.hero = hero;
-            this.heroId = hero.id
-        });
+        this.allHeroes = this.dataService.getHero();
     }
 
 }

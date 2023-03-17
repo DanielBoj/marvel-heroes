@@ -219,9 +219,12 @@ export class MarvelService {
                 });
 
                 // Parseamos la fecha a un formato legible
-                response.data.results[0].modified = new Date(response.data.results[0].modified).toLocaleDateString();
+                response.data.results.forEach((character: Result) => {
+                    character.modified = new Date(character.modified).toLocaleDateString();
+                });
 
                 // Si obtenemos una respuesta correcta, devolvemos los datos
+
                 return response.data.results;
             } else {
                 throw new Error('Lo siento, no hemos podido obtener los datos');
