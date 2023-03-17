@@ -102,13 +102,16 @@ export class SearchComponent implements OnInit, OnDestroy {
                 const hero = this.marvelService.getHero(value).subscribe((hero: any) => {
                     this.hero = hero;
                     let heroData: Result = {} as Result;
-                    heroData = hero as unknown as Result;
+
                     this.hero.forEach((hero: any) => {
                         heroData = hero;
                     });
 
                     // Compartimos los datos del personaje con el componente padre
                     this.dataService.setHero(heroData);
+
+                    // Actualizamos el id del personaje
+                    this.dataService.setHeroId(heroData.id);
                 });
             }
         });

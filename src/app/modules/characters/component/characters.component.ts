@@ -25,7 +25,7 @@ export class CharactersComponent implements OnInit {
 
     // Variables para el título y subtítulo de la página
     title = 'In times of despair...';
-    subtitle = '¡Search for your destined saviour!';
+    subtitle = 'Search for your destined saviour!';
 
     // Observable para almacenar los personajes
     allCharacters?: Observable<Result> | any;

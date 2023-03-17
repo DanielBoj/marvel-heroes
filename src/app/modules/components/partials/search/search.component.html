@@ -21,6 +21,8 @@
                         [formControl]="search"
 
                         (keyup.enter)="onFilter(searchInput.value)"
+                        (click)="onFilter(searchInput.value)"
+                        (keyup)="onFilter(searchInput.value)"
 
 
                         #searchInput

@@ -1,8 +1,19 @@
 // Imports
 @use "/src/app/styles/variables" as root
 
-.section-header
+.img-box
+    position: relative
+    width: 100%
+    height: 100%
+    overflow: hidden
+    transition: all 0.5s ease-in-out
     background-image: url("/assets/img/banner.jpeg")
+    background-size: cover
+    background-position: center
+    background-repeat: no-repeat
+    margin-bottom: 3rem
+
+.section-header
     margin-bottom: 3rem
 
     h2
