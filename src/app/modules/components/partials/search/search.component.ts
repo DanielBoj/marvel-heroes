@@ -141,22 +141,35 @@ export class SearchComponent implements OnInit, OnDestroy {
         return opt ? opt : '';
     }
 
-    onChange = (event: any) => {
+    onChange = (event: any, name?: string) => {
 
-        // LLamar al método para obtener los datos del personaje
-        this.heroes = this.marvelService.getHero(event.target.value)
-            .pipe((
-                debounceTime(600)),
-                distinctUntilChanged(),
-            ).subscribe((hero: any) => {
-                this.heroes = hero;
+        // Llamar al método para obtener los datos del personaje:
+        // Si el usuario entra un nombre, realiza la búsqueda de forma automática
+        // Si el usuario selecciona un nombre de la lista de sugerencias, realiza la búsqueda al presionar el icono de búsqueda
+        // Si el usuario presiona enter, realiza la búsqueda
+        if (name !== undefined) {
+            console.log('existe');
+            this.heroes = this.marvelService.getHero(name)
+                .pipe((
+                    debounceTime(600)),
+                    distinctUntilChanged(),
+                ).subscribe((hero: any) => {
+                    this.heroes = hero;
 
-                // Enviamos los datos del personaje al servicio de datos
-                this.dataService.setHero(hero);
-            }
-            );
+                    // Enviamos los datos del personaje al servicio de datos
+                    this.dataService.setHero(hero);
+                });
+        } else {
+            this.heroes = this.marvelService.getHero(event.target.value)
+                .pipe((
+                    debounceTime(600)),
+                    distinctUntilChanged(),
+                ).subscribe((hero: any) => {
+                    this.heroes = hero;
 
-        // Uncoment to test
-        // console.log(event.target.value);
+                    // Enviamos los datos del personaje al servicio de datos
+                    this.dataService.setHero(hero);
+                });
+        }
     }
 }

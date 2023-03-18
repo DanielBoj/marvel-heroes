@@ -2,9 +2,17 @@
 @use "/src/app/styles/variables" as root
 
 form
-    .glass-icon
-        color: root.$font-red-color
-        width: 80%
+    .search-button
+        display: inline-flex
+        justify-items: center
+        align-items: center
+        height: 100%
+        width: 100%
+        .glass-icon
+            height: 100%
+            width: 100%
+            margin-top: 1rem
+            font-size: 3rem
     .search
         .search-field
             height: auto

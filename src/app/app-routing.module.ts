@@ -4,7 +4,6 @@ import { RouterModule, Routes } from '@angular/router';
 // Components
 import { CharactersComponent } from './modules/characters/component/characters.component';
 import { DetailComponent } from './modules/detail/component/detail.component';
-import { AboutComponent } from './modules/components/partials/about/about.component';
 import { PageComponent } from './modules/page/page.component';
 
 const routes: Routes = [

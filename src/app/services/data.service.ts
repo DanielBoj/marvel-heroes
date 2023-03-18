@@ -30,7 +30,6 @@ export class DataService {
     }
 
     getHero() {
-        console.log(this.currentHero);
         return this.currentHero;
     }
 

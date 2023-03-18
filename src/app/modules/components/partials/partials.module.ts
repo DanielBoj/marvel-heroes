@@ -10,6 +10,7 @@ import { MaterialModule } from 'src/app/material/material.module';
 // Font Awesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
+// Formularios
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 
@@ -18,16 +19,10 @@ import { BannerComponent } from './banner/banner.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { SearchComponent } from './search/search.component';
-
 import { HeroCardComponent } from './hero-card/hero-card.component';
 
-
+// Diseño Flex
 import { LayoutModule } from '@angular/cdk/layout';
-// import { MatToolbarModule } from '@angular/material/toolbar';
-// import { MatButtonModule } from '@angular/material/button';
-// import { MatSidenavModule } from '@angular/material/sidenav';
-// import { MatIconModule } from '@angular/material/icon';
-// import { MatListModule } from '@angular/material/list';
 
 
 
@@ -46,11 +41,6 @@ import { LayoutModule } from '@angular/cdk/layout';
         MaterialModule,
         FontAwesomeModule,
         LayoutModule,
-        // MatToolbarModule,
-        // MatButtonModule,
-        // MatSidenavModule,
-        // MatIconModule,
-        // MatListModule,
         ReactiveFormsModule,
         FormsModule
     ],

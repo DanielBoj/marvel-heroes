@@ -1,47 +1,47 @@
 <form>
-        <mat-grid-list cols="8" rowHeight="10vh">
-            <mat-grid-tile class="search-field" colspan="1">
-                <fa-icon
-                class="glass-icon"
-                [icon]="['fas', 'magnifying-glass']"
-                size="2x"
-                [transform]="isHovered ? 'grow-3 up-2' : 'grow-0'"
-                (mouseenter)="isHovered = true"
-                (mouseleave)="isHovered = false"
-                (click)="onFilter(searchInput.value)"
+    <mat-grid-list cols="8" rowHeight="15vh">
+        <mat-grid-tile class="search-field" colspan="1">
+            <button
+                mat-icon-button
+                class="search-button"
+                (click)="onChange($event, searchInput.value)"
+            >
+                <mat-icon
+                    color="accent"
+                    class="glass-icon"
+                    size="x2"
+                    (mouseenter)="isHovered = true"
+                    (mouseleave)="isHovered = false"
+                    >search</mat-icon
+                >
+            </button>
+        </mat-grid-tile>
+        <mat-grid-tile class="search" colspan="6">
+            <mat-form-field class="search-field" color="accent">
+                <mat-label>Search your Hero!</mat-label>
+                <input
+                    type="text"
+                    matInput
+                    placeholder="search"
+                    value=""
+                    name="name"
+                    [matAutocomplete]="auto"
+                    [formControl]="search"
+                    autocomplete="off"
+                    (keyup)="onFilter(searchInput.value)"
+                    (input)="onChange($event)"
+                    (keydown.enter)="onChange($event)"
+                    #searchInput
                 />
-            </mat-grid-tile>
-            <mat-grid-tile class="search" colspan="6">
-                <mat-form-field class="search-field" color="accent">
-                    <mat-label>Search your Hero!</mat-label>
-                    <input type="text"
-                        matInput placeholder="search"
-                        value=""
-                        name="name"
-                        [matAutocomplete]="auto"
-                        [formControl]="search"
-
-
-                        autocomplete="on"
-
-                        (keyup)="onFilter(searchInput.value)"
-                        (input)="onChange($event)"
-
-
-
-                        #searchInput
-                        />
-                    <mat-autocomplete #auto="matAutocomplete"
-                    s>
-                        <mat-option *ngFor="let name of filteredNames | async" [value]="name">{{name}}</mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
-            </mat-grid-tile>
-        </mat-grid-list>
-        <ng-container></ng-container>
+                <mat-autocomplete #auto="matAutocomplete" s>
+                    <mat-option
+                        *ngFor="let name of filteredNames | async"
+                        [value]="name"
+                        >{{ name }}</mat-option
+                    >
+                </mat-autocomplete>
+            </mat-form-field>
+        </mat-grid-tile>
+    </mat-grid-list>
+    <ng-container></ng-container>
 </form>
-
-<!-- (keydown.enter)="onFilter(searchInput.value)" -->
-<!-- (click)="onFilter(searchInput.value)" -->
-<!-- (click)="onFilter(searchInput.value)"
-                        (keyup.enter)="onFilter(searchInput.value)" -->
