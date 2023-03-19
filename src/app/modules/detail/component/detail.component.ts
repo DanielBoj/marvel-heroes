@@ -61,13 +61,6 @@ export class DetailComponent implements OnInit {
 
         // Enviamos el ID del personaje al store
         this.store.dispatch(heroesActions.captureHeroIdSuccess({ heroId: this.heroId }));
-
-        // Enviamos la URL de la página del personaje en Marvel al store
-        // this.store.dispatch(heroesActions.captureHeroUrlSuccess({ heroUrl: url }));
-        this.setHeroUrl();
-
-        // Obtenemos la URL del personaje
-        this.getHeroUrl();
     }
 
     // Método para obtener los datos del personaje, además, generaremos un objeto para poder extraer los datos y usarlos en la vista
@@ -95,21 +88,6 @@ export class DetailComponent implements OnInit {
         this.activatedRoute.params.subscribe(params => {
             this.heroId = params['id'];
         })
-    }
-
-    // Método para obtener la URL del personaje y subirla al store y poder recuperarla en la vista
-    getHeroUrl = () => {
-        this.heroUrl$ = this.store.select(heroesSelectors.selectHeroUrlValue);
-    }
-
-    setHeroUrl = () => {
-
-        // Obtenemos la URL del personaje
-        this.hero$.forEach((hero) => {
-            hero.map((hero) => this.store.dispatch(heroesActions.captureHeroUrlSuccess({ heroUrl: hero.urls[3].url })));
-        });
-
-
     }
 
     // Método para navegar a la página de Marvel del Héroe

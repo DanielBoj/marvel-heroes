@@ -70,9 +70,4 @@ export class StoriesComponent implements OnInit {
         // Cargamos las historias del héroe desde la API y las almacenamos en el store
         this.store.dispatch(loadStories({ id: idString }));
     }
-
-    // Método para navegar a los datos json de la historia
-    checkStory = (url: string) => {
-        this.router.navigate([`${url}${this.url}`]);
-    }
 }

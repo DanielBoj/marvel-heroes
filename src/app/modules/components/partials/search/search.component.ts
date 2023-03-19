@@ -80,8 +80,11 @@ export class SearchComponent implements OnInit {
         const filterValue = value.toLowerCase();
 
         // Filtramos los nombres de los personajes
-        return this.namesOpt.filter(option => option.toLowerCase().includes(filterValue));
-
+        if (value.length > 2) {
+            return [...new Set(this.namesOpt.filter(option => option.toLowerCase().includes(filterValue)))];
+        } else {
+            return [];
+        }
     }
 
     /* Métodos */
