@@ -119,7 +119,7 @@ export class ComicsComponent implements OnInit {
 
     // Método para navegar a la página de detalle de Marvel un cómic
     checkComic = (url: string) => {
-        this.router.navigate([`${url}`]);
+        window.open(url);
     }
 
     // Muestra el input de filtrado
