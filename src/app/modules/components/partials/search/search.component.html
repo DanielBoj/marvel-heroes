@@ -1,4 +1,12 @@
 <form>
+    <div class="spinner-box" *ngIf="loading$ | async">
+        <mat-spinner
+            [diameter]="50"
+            [strokeWidth]="6"
+            color="accent"
+        ></mat-spinner>
+        <span class="spinner-text">Loading...</span>
+    </div>
     <mat-grid-list cols="8" rowHeight="15vh">
         <mat-grid-tile class="search-field" colspan="1">
             <button
@@ -6,14 +14,7 @@
                 class="search-button"
                 (click)="onChange($event, searchInput.value)"
             >
-                <mat-icon
-                    color="accent"
-                    class="glass-icon"
-                    size="x2"
-                    (mouseenter)="isHovered = true"
-                    (mouseleave)="isHovered = false"
-                    >search</mat-icon
-                >
+                <mat-icon color="accent" class="glass-icon">search</mat-icon>
             </button>
         </mat-grid-tile>
         <mat-grid-tile class="search" colspan="6">

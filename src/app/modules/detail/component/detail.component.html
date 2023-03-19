@@ -4,7 +4,7 @@
 <main class="detail-content">
     <ng-container
         class="character-card-container"
-        *ngFor="let hero of hero | async"
+        *ngFor="let hero of hero$ | async"
     >
         <mat-card class="hero-card">
             <mat-card-header>

@@ -1,5 +1,5 @@
-<ng-container class="character-card-container" *ngIf="allHeroes">
-    <ng-container *ngFor="let hero of allHeroes | async">
+<ng-container class="character-card-container" *ngIf="allHeroes$">
+    <ng-container *ngFor="let hero of allHeroes$ | async">
         <mat-card class="hero-card">
             <mat-card-header>
                 <mat-card-title>

@@ -36,6 +36,9 @@ import { faFacebook as fabFacebook } from '@fortawesome/free-brands-svg-icons';
 import { faTwitter as fabTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faMagnifyingGlass as fasMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { DataService } from './services/data.service';
+import { ROOT_REDUCERS } from './state/app.state';
+// import { EffectsModule } from '@ngrx/effects';
+// import { HeroEffects } from './state/effects/hero.effects';
 
 
 @NgModule({
@@ -47,9 +50,9 @@ import { DataService } from './services/data.service';
         AppRoutingModule,
         BrowserAnimationsModule,
         // Modulo principal de la librería NgRx para manejar el estado de la aplicación
-        StoreModule.forRoot({}, {}),//TODO
-        // Modulo para manejar las herramientas de debug de NgRx en el Browser
-        StoreDevtoolsModule.instrument({ name: 'TEST' }), // TODO
+        StoreModule.forRoot(ROOT_REDUCERS),
+        // Modulos para manejar las herramientas de debug de NgRx en el Browser
+        StoreDevtoolsModule.instrument({ name: 'TEST' }),
         // Formularios
         ReactiveFormsModule,
         FormsModule,

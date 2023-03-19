@@ -17,6 +17,12 @@ import { Observable } from 'rxjs/internal/Observable';
 // Para poder volver atrás con código del mismo framework
 import { Location } from '@angular/common';
 
+// Importamos el store de NgRx para el modelos reactivos
+import { Store } from '@ngrx/store';
+import { captureHeroIdSuccess, loadHeroSuccess } from 'src/app/state/actions/heroes.actions';
+import { AppState } from 'src/app/state/app.state';
+import { selectHeroIdValue, selectListHeroes } from 'src/app/state/selectors/heroes.selectors';
+
 
 
 @Component({
@@ -28,39 +34,54 @@ export class DetailComponent implements OnInit {
 
     descSubt: string = 'Biography';
     appearanceSubt: string = 'Last Appearance';
-    // modifiedStringDate: string = '';
 
     // Captura del parámetro de la URL
     heroId!: number;
 
     // Observable para almacenar los datos del personaje retornados por la API
-    hero: Observable<Result[]> = new Observable();
+    hero$: Observable<any> = new Observable();
 
 
     constructor(
         private marvelService: MarvelService,
-        private activatedRoute: ActivatedRoute, private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private router: Router,
         private location: Location,
-        private dataService: DataService) {
+        private dataService: DataService,
+        private store: Store<AppState>) {
 
         // Capturamos el parámetro de la URL
         this.getIdFromParams();
     }
 
     ngOnInit(): void {
-        // Cargamos los datos del personaje
+
+        // Inicializamos cargando los datos datos del personaje
         this.getHeroById(this.heroId);
+        // Obtenemos los datos del store
+        this.hero$ = this.store.select(selectListHeroes);
+
+        // Enviamos el ID del personaje al store
+        this.store.dispatch(captureHeroIdSuccess({ heroId: this.heroId }));
     }
 
     ngOnDestroy(): void {
         // Enviamos el ID del personaje al servicio de datos
         this.dataService.setHeroId(this.heroId);
+
     }
 
     // Método para obtener los datos del personaje, además, generaremos un objeto para poder extraer los datos y usarlos en la vista
     getHeroById = async (heroId: number) => {
         if (heroId > 0) {
-            this.hero = await this.marvelService.getHeroById(heroId);
+            this.hero$ = await this.marvelService.getHeroById(heroId);
+            return await this.marvelService.getHeroById(heroId).subscribe(
+                (hero: Result[]) => {
+                    // Cargamos la información en el store
+                    this.store.dispatch(loadHeroSuccess({ heroes: hero }));
+                }
+            );
+
         } else {
             console.log('Error: Could not find a suitable hero ID');
             return;
