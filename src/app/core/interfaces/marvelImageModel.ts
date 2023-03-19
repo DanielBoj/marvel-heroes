@@ -1,32 +1,30 @@
-/*
-* Esta interface contiene los tipos que usa la API de Marvel para las imágenes
-*/
+/* Esta interface contiene los tipos que usa la API de Marvel para las imágenes */
 
 export enum ImageVariant {
-  detail = 'detail',
-  full = '',
-  portrait_small = "portrait_small",
-  portrait_medium = "portrait_medium",
-  portrait_xlarge = "portrait_xlarge",
-  portrait_fantastic = "portrait_fantastic",
-  portrait_uncanny = "portrait_uncanny",
-  portrait_incredible = "portrait_incredible",
-  standard_small = "standard_small",
-  standard_medium = "standard_medium",
-  standard_large = "standard_large",
-  standard_xlarge = "standard_xlarge",
-  standard_fantastic = "standard_fantastic",
-  standard_amazing = "standard_amazing",
-  landscape_small = "landscape_small",
-  landscape_medium = "landscape_medium",
-  landscape_large = "landscape_large",
-  landscape_xlarge = "landscape_xlarge",
-  landscape_amazing = "landscape_amazing",
-  landscape_incredible = "landscape_incredible",
+    detail = 'detail',
+    full = '',
+    portrait_small = "portrait_small",
+    portrait_medium = "portrait_medium",
+    portrait_xlarge = "portrait_xlarge",
+    portrait_fantastic = "portrait_fantastic",
+    portrait_uncanny = "portrait_uncanny",
+    portrait_incredible = "portrait_incredible",
+    standard_small = "standard_small",
+    standard_medium = "standard_medium",
+    standard_large = "standard_large",
+    standard_xlarge = "standard_xlarge",
+    standard_fantastic = "standard_fantastic",
+    standard_amazing = "standard_amazing",
+    landscape_small = "landscape_small",
+    landscape_medium = "landscape_medium",
+    landscape_large = "landscape_large",
+    landscape_xlarge = "landscape_xlarge",
+    landscape_amazing = "landscape_amazing",
+    landscape_incredible = "landscape_incredible",
 }
 
 // Obtenemos los Thumbnails de una imagen
 export interface ImageThumbnail {
-  path: string; // URI de la imagen
-  extension: string; // Extensión de la imagen
+    path: string; // URI de la imagen
+    extension: string; // Extensión de la imagen
 }

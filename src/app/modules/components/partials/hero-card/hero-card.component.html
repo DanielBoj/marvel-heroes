@@ -1,3 +1,4 @@
+<!-- Vista HTML para mostrar un componente tipo card con los datos del personaje. -->
 <ng-container class="character-card-container" *ngIf="allHeroes$">
     <ng-container *ngFor="let hero of allHeroes$ | async">
         <mat-card class="hero-card">
@@ -26,7 +27,7 @@
                 <button
                     mat-button
                     class="get-button"
-                    (click)="getHero(hero.id)"
+                    routerLink="/character/{{ hero.id }}"
                 >
                     Details
                 </button>

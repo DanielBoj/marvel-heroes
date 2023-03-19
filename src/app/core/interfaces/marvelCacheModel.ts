@@ -1,3 +1,5 @@
+/* Interfaz para implementar la cache interna de datos */
+
 // Imports
 import { Result } from './marvelResponseModel';
 import { Comic } from './marvelComicResponse';

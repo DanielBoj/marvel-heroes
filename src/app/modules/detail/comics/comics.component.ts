@@ -1,20 +1,23 @@
+/* Implementa las funcionalidades para cargar y mostrar los cómics protagonizados por un personaje y para poderlos filtrar por tipo. */
+
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
-// Importamos los modelos de interfaces
+// Interfaces
 import { Comic } from 'src/app/core/interfaces/marvelComicResponse';
-
-// Servicio para realizar las llamadas a la API
-import { MarvelService } from 'src/app/services/marvel.service';
 
 // Importamos el store de NgRx para el modelos reactivos
 import { Store } from '@ngrx/store';
-import { loadComicsSuccess } from 'src/app/state/actions/heroes.actions';
+import * as heroesActions from 'src/app/state/actions/heroes.actions';
+import * as heroesSelectors from 'src/app/state/selectors/heroes.selectors';
 import { AppState } from 'src/app/state/app.state';
-import { selectHeroIdValue, selectListComics } from 'src/app/state/selectors/heroes.selectors';
+
+// Tipos de cómics
+import { ComicTypes } from 'src/app/core/types/filter.opts';
+
 
 
 
@@ -26,7 +29,7 @@ import { selectHeroIdValue, selectListComics } from 'src/app/state/selectors/her
 export class ComicsComponent implements OnInit {
 
     // Capturamos el ID del personaje de la URL
-    heroId$: number = 0;
+    heroId: number = 0;
 
     // Gestor para la animación del icono
     isHovered: boolean = false;
@@ -42,46 +45,39 @@ export class ComicsComponent implements OnInit {
     filter: FormControl = new FormControl('');
 
     // Objeto para almacenar los cómics
-    comics$: Observable<readonly Comic[]> = new Observable();
+    comics$: Observable<Comic[]> = new Observable();
 
-    // Control de respuesta sin resultados
+    // Control de respuesta sin resultados y carga de datos
     areNoResults: boolean = false;
+    // Carga de estados iniciales
+    loading$: Observable<boolean> = new Observable();
 
-    constructor(private marvelService: MarvelService,
-        private activatedRoute: ActivatedRoute,
+
+
+    constructor(
         private router: Router,
-        private store: Store<AppState>) {
-
-        // Capturamos el parámetro de la URL
-        // this.getIdFromParams();
-        // Cargamos los parámetros de filtrado
-        this.filterOpts = [
-            'None',
-            'comic',
-            'magazine',
-            'trade paperback',
-            'hardcover',
-            'digest',
-            'graphic novel',
-            'digital comic',
-            'infinite comic'
-        ]
-    }
+        private store: Store<AppState>
+    ) { }
 
     ngOnInit(): void {
+
+        // Carga de estados iniciales
+        this.loading$ = this.store.select(heroesSelectors.selectLoadingComics);
+
+        // Cargamos las opciones de tipo de cómic
+        this.filterOpts = ComicTypes;
+
         // Cargamos el Id del héroe dsesde el store. Hay que parsearlo para poderlo usar
-        this.store.select(selectHeroIdValue).forEach((heroId: number) => {
-            this.heroId$ = heroId;
-        });
+        this.setHeroId();
 
         // Para que no se filtre nada al cargar la página
         this.filter.defaultValue;
 
         // Cargamos los cómics
-        if (this.heroId$ !== 0) {
-            this.getComics(this.heroId$);
+        if (this.heroId !== 0) {
+            this.getComics(this.heroId);
         }
-        this.comics$ = this.store.select(selectListComics);
+        this.comics$ = this.store.select(heroesSelectors.selectListComics);
 
         // Filtramos los valores de filtrado
         this.filteredOpts$ = this.filter.valueChanges.pipe(
@@ -103,30 +99,22 @@ export class ComicsComponent implements OnInit {
 
     // Método para obtener todos los cómics relacionados con un héroe a través de la id de este llamando a la API
     getComics = async (heroId: number) => {
-        // Realizamos la llamada a la API y subimos el resultado al store
-        await this.marvelService.getComics(heroId).subscribe(
-            (comics: Comic[]) => {
-                // Cargamos la información en el store
-                this.store.dispatch(loadComicsSuccess({ comics: comics }));
-            }
-        )
+
+        // Cambiamos el tipo de dato
+        const idString = heroId.toString();
+
+        // Cargamos los datos en desde la API en el store
+        this.store.dispatch(heroesActions.loadComics({ id: idString }))
     }
 
     // Método para obtener todos los cómics relacionados con un héroe a través de la id de este llamando a la API y filtrados por el tipo de cómic
     getFilteredComics = async (heroId: number, filter: string) => {
 
-        // Realizamos la llamada a la API y subimos el resultado al store
-        await this.marvelService.getFilteredComics(heroId, filter).subscribe(
-            (comics: Comic[]) => {
-                if (comics.length === 0) {
-                    return this.areNoResults = true;
-                }
+        // Cambiamos el tipo de dato
+        const idString = heroId.toString();
 
-                // Cargamos la información en el store
-                this.areNoResults = false;
-                return this.store.dispatch(loadComicsSuccess({ comics: comics }));
-            }
-        );
+        // Cargamos los datos en el store desde la API
+        this.store.dispatch(heroesActions.loadComicsByType({ id: idString, opt: filter }));
     }
 
     // Método para navegar a la página de detalle de Marvel un cómic
@@ -158,15 +146,24 @@ export class ComicsComponent implements OnInit {
         if (this.filterOpts.includes(event.target.value) && event.target.value !== 'none') {
 
             // Llamamos a la API y cargamos los datos en el store
-            this.getFilteredComics(this.heroId$, event.target.value);
+            this.getFilteredComics(this.heroId, event.target.value);
+
             // Obtenemos el resultado de la store
-            this.comics$ = this.store.select(selectListComics);
+            this.comics$ = this.store.select(heroesSelectors.selectListComics);
         } else {
 
             // Llamamos a la API y cargamos los datos en el store
-            this.getComics(this.heroId$);
+            this.getComics(this.heroId);
+
             // Obtenemos los datos del store
-            this.comics$ = this.store.select(selectListComics);
+            this.comics$ = this.store.select(heroesSelectors.selectListComics);
         }
+    }
+
+    // Método para cargar la id del héroe desde el store
+    setHeroId = () => {
+
+        //Obtenemos el valor del store
+        this.store.select(heroesSelectors.selectHeroIdValue).forEach((heroId: number) => this.heroId = heroId);
     }
 }

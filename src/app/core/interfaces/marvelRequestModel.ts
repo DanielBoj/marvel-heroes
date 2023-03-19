@@ -1,6 +1,4 @@
-/*
-* Esta interface define el modelo de la petición que se realiza a la API de Marvel
-*/
+/* Esta interface define el modelo de la petición que se realiza a la API de Marvel */
 
 export interface MarvelRequestOptions {
     limit: number; // Número de elementos a devolver

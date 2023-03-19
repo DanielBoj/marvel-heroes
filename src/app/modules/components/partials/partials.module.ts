@@ -24,6 +24,10 @@ import { HeroCardComponent } from './hero-card/hero-card.component';
 // Diseño Flex
 import { LayoutModule } from '@angular/cdk/layout';
 
+// NgRx
+import { StoreModule } from '@ngrx/store';
+import { ROOT_REDUCERS } from 'src/app/state/app.state';
+
 
 
 @NgModule({
@@ -42,7 +46,8 @@ import { LayoutModule } from '@angular/cdk/layout';
         FontAwesomeModule,
         LayoutModule,
         ReactiveFormsModule,
-        FormsModule
+        FormsModule,
+        StoreModule.forFeature('partials', ROOT_REDUCERS)
     ],
     exports: [
         BannerComponent,

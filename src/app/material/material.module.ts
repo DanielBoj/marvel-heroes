@@ -1,4 +1,4 @@
-// Administramos los módulos de Angular Material desde un módulo independiente para aislar cualquier posible error y mantener el código más limpio
+/* Administramos los módulos de Angular Material desde un módulo independiente para aislar cualquier posible error y mantener el código más limpio. */
 
 import { NgModule } from '@angular/core';
 

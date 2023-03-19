@@ -1,3 +1,5 @@
+/* Interfaz de respuesta de la API de Marvel para las historias */
+
 export interface StoryDataWrapper {
     code: number;
     status: string;

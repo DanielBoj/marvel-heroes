@@ -1,3 +1,5 @@
+/* Interfaces de respuesta de la API de Marvel para cómics */
+
 export interface ComicDataWrapper {
     code: number;
     status: string;

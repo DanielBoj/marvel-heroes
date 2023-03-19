@@ -1,3 +1,5 @@
+// Importación de los módulos y librerías necesarias para el funcionamiento de la aplicación
+
 import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -35,10 +37,9 @@ import { faInstagram as fabInstagram } from '@fortawesome/free-brands-svg-icons'
 import { faFacebook as fabFacebook } from '@fortawesome/free-brands-svg-icons';
 import { faTwitter as fabTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faMagnifyingGlass as fasMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { DataService } from './services/data.service';
 import { ROOT_REDUCERS } from './state/app.state';
-// import { EffectsModule } from '@ngrx/effects';
-// import { HeroEffects } from './state/effects/hero.effects';
+import { EffectsModule } from '@ngrx/effects';
+import { HeroEffects } from './state/effects/heroes.effects';
 
 
 @NgModule({
@@ -53,6 +54,7 @@ import { ROOT_REDUCERS } from './state/app.state';
         StoreModule.forRoot(ROOT_REDUCERS),
         // Modulos para manejar las herramientas de debug de NgRx en el Browser
         StoreDevtoolsModule.instrument({ name: 'TEST' }),
+        EffectsModule.forRoot([HeroEffects]),
         // Formularios
         ReactiveFormsModule,
         FormsModule,
@@ -68,10 +70,10 @@ import { ROOT_REDUCERS } from './state/app.state';
         // Módulo de gestión de Angular Material
         MaterialModule,
         // Iconos Font Awesome
-        FontAwesomeModule
+        FontAwesomeModule,
+
     ],
-    providers: [DataService],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
 })
 export class AppModule {
     constructor(library: FaIconLibrary) {
@@ -79,7 +81,7 @@ export class AppModule {
             fabInstagram,
             fabFacebook,
             fabTwitter,
-            fasMagnifyingGlass
+            fasMagnifyingGlass,
         );
     }
 }

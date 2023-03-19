@@ -1,6 +1,5 @@
-/*
-* Servicio principal de la APP.
-* Contiene los métodos para realizar las peticiones HTTP a la API de Marvel
+/*  Servicio principal de la APP.
+Contiene los métodos para realizar las peticiones HTTP a la API de Marvel
 */
 
 import { Injectable } from '@angular/core';
@@ -11,14 +10,12 @@ import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
 // Interfaces
-import { ImageThumbnail, ImageVariant } from '../core/interfaces/marvelImageModel';
-import { MarvelRequestOptions, Category } from '../core/interfaces/marvelRequestModel';
 import { Response, Data, Result, StoriesItem } from '../core/interfaces/marvelResponseModel';
 import { MarvelCache } from '../core/interfaces/marvelCacheModel';
 
 // Variables de entorno
 import { environment } from '../../environments/environment';
-import { CharacterList, CharacterSummary, Comic, ComicDataWrapper, ComicDate } from '../core/interfaces/marvelComicResponse';
+import { CharacterSummary, Comic, ComicDataWrapper } from '../core/interfaces/marvelComicResponse';
 import { Story, StoryDataWrapper } from '../core/interfaces/marvelStoriesResponse';
 
 
@@ -32,7 +29,7 @@ export class MarvelService {
     private apiKey: string = environment.apiKey;
     private hash: string = environment.hash;
 
-    // Opciones de búsqueda
+    // Opciones para filtrar las peticiones de búsqueda
     private opts = {
         heroOpts: [
             'limit=1',
@@ -59,6 +56,7 @@ export class MarvelService {
     // Límite de héroes según la Api de Marvel
     private namesLimit: number = 1562;
 
+    // Caché para almacenar los datos de forma interna en la aplicación
     cache: MarvelCache = {
         names: [],
         characters: undefined,
@@ -139,7 +137,7 @@ export class MarvelService {
             }));
     }
 
-    // Método que permite obtener todos los personajes permitidos por una llamada a la API
+    // Método que permite obtener todos los personajes permitidos por una llamada a la API. Lo dejo porque serviria para mostrar un grid con todos los personajes
     getAllCharacters = (options?: string[]): Observable<Result> | any => {
 
         // // Comprobamos la memoria caché para ver si ya tenemos los datos de los personajes
@@ -177,12 +175,12 @@ export class MarvelService {
         ));
     }
 
-    // Método para obtener los datos de un personaje en concreto
-    getHero = (heroName: string): Observable<Result> | any => {
+    // Método para obtener los datos de un personaje en concreto según su nombre
+    getHero = (heroName: string): Observable<Result[]> => {
 
         // Descargamos la cantidad de peticiones innecesarias
         if (heroName === null || heroName === ' ') {
-            return undefined;
+            return of([]);
         }
 
         // // Formateamos el nombre del personaje para evitar errores en la búsqueda
@@ -191,7 +189,7 @@ export class MarvelService {
 
         // // Comprobamos la memoria caché
         if (this.cache.characters?.map((character: Result) => character.name.toLowerCase()).includes(heroName.toLowerCase())) {
-            return of(this.cache.characters?.find((character: Result) => character.name.toLowerCase().includes(heroName.toLowerCase())));
+            return of(this.cache.characters?.find((character: Result) => character.name.toLowerCase().includes(heroName.toLowerCase())) as any);
         }
 
         // Si no, obtenemos los datos de la API de Marvel
@@ -224,7 +222,6 @@ export class MarvelService {
                 });
 
                 // Si obtenemos una respuesta correcta, devolvemos los datos
-
                 return response.data.results;
             } else {
                 throw new Error('Lo siento, no hemos podido obtener los datos');
@@ -232,14 +229,15 @@ export class MarvelService {
         }));
     }
 
-    getHeroById = (heroId: number): Observable<Result[]> | any => {
+    // Método para obtener los datos de un personaje en concreto a través de su ID
+    getHeroById = (heroId: string): Observable<Result[]> => {
 
         // Comprobamos la memoria caché
         if (this.cache.characters?.forEach((character: Result) => {
-            return character.id === heroId;
+            return character.id === Number(heroId);
         })) {
             return of(this.cache.characters?.find((character: Result) =>
-                character.id === heroId));
+                character.id === Number(heroId)) as any);
         }
 
         // Si no, obtenemos los datos de la API de Marvel
@@ -261,7 +259,7 @@ export class MarvelService {
 
                 // Controlamos el caché
                 response.data.results.forEach((character: Result) => {
-                    if (!this.cache.characters?.map((character: Result) => character.id === heroId)) {
+                    if (!this.cache.characters?.map((character: Result) => character.id === Number(heroId))) {
                         this.cache.characters?.push(character);
                     }
                 });
@@ -277,7 +275,8 @@ export class MarvelService {
         }));
     }
 
-    getHeroStories = (heroId: number): Observable<Story[]> | any => {
+    // Método para obtener las historias de un personaje en concreto
+    getHeroStories = (heroId: string): Observable<Story[]> => {
 
         // Comprobamos la memoria caché
         if (this.cache.stories?.map((story: Story) => story.characters.items.map((item: CharacterSummary) => item.resourceURI).includes(`${this.url}characters/${heroId}`))) {
@@ -318,7 +317,8 @@ export class MarvelService {
         }));
     }
 
-    getComics = (heroId: number): Observable<Comic[]> | any => {
+    // Método para obtener los cómics en los que aparece un personaje en concreto
+    getComics = (heroId: string): Observable<Comic[]> => {
 
         // Comprobamos la memoria caché, en este caso es algo más complejo que los anteriores. Debemos comprobar que el personaje está en el cómic, para ello comprobamos si el ID del personaje aparece en la lista de personajes del cómic
         if (this.cache.comics?.map((comic: Comic) => comic.characters.items.map((character: CharacterSummary) => character.resourceURI).includes(`${this.url}characters/${heroId}`))) {
@@ -370,7 +370,8 @@ export class MarvelService {
         }));
     }
 
-    getFilteredComics = (heroId: number, filter: string): Observable<Comic[]> | any => {
+    // Método para obtener los cómics en los que aparece un personaje en concreto filtrados segun el tipo de cómic
+    getFilteredComics = (heroId: string, filter: string): Observable<Comic[]> => {
 
         // Comprobamos la memoria caché, en este caso es algo más complejo que los anteriores. Debemos comprobar que el personaje está en el cómic, para ello comprobamos si el ID del personaje aparece en la lista de personajes del cómic
         if (this.cache.comics?.map((comic: Comic) => comic.characters.items.map((character: CharacterSummary) => character.resourceURI).includes(`${this.url}characters/${heroId}`))) {

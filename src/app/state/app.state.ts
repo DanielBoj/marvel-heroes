@@ -1,26 +1,28 @@
 /* Contiene todos los estados de la aplicación para su exportación */
 
 import { ActionReducerMap } from "@ngrx/store";
-import { NamesState } from "../core/interfaces/names.state";
+
+// Importamos las interfaces de los estados
+import * as heroesState from "../core/interfaces/heroes.state.interface";
 
 // Importamos los reducers
-import { comicsReducer, heroIdReducer, heroesReducer, namesReducer, storiesReducer } from "./reducers/heroes.reducers";
-import { HeroIdState, HeroState } from "../core/interfaces/hero.state";
-import { ComicsState, StoriesState } from "../core/interfaces/comics.state";
+import * as heroesReducers from "./reducers/heroes.reducers";
 
 export interface AppState {
-    names: NamesState,
-    heroes: HeroState,
-    comics: ComicsState,
-    stories: StoriesState,
-    heroId: HeroIdState
+    names: heroesState.NamesState,
+    heroes: heroesState.HeroState,
+    comics: heroesState.ComicsState,
+    stories: heroesState.StoriesState,
+    heroId: heroesState.HeroIdState,
+    heroUrl: heroesState.HeroUrlState,
 }
 
 
 export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
-    names: namesReducer,
-    heroes: heroesReducer,
-    comics: comicsReducer,
-    stories: storiesReducer,
-    heroId: heroIdReducer,
+    names: heroesReducers.namesReducer,
+    heroes: heroesReducers.heroesReducer,
+    comics: heroesReducers.comicsReducer,
+    stories: heroesReducers.storiesReducer,
+    heroId: heroesReducers.heroIdReducer,
+    heroUrl: heroesReducers.heroUrlReducer,
 }

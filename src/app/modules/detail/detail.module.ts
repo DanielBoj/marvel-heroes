@@ -21,6 +21,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 // Font Awesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
+// NgRx
+import { StoreModule } from '@ngrx/store';
+import { ROOT_REDUCERS } from 'src/app/state/app.state';
+
 
 
 @NgModule({
@@ -41,6 +45,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
         FontAwesomeModule,
         FormsModule,
         ReactiveFormsModule,
+        StoreModule.forFeature('detail', ROOT_REDUCERS),
     ]
 })
 export class DetailModule { }

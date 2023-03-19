@@ -1,17 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
-import { concatMap, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+/* Implementa la lógica para mostrar la caja de títulos bajo la que se representa el personaje, simplemente realiza funciones de enrutamiento */
 
-// Modelos de interfaces
-import { Category, MarvelRequestOptions } from 'src/app/core/interfaces/marvelRequestModel';
-import { ImageVariant } from 'src/app/core/interfaces/marvelImageModel';
-import { Response, Data, Result } from 'src/app/core/interfaces/marvelResponseModel';
-import { MarvelCache } from 'src/app/core/interfaces/marvelCacheModel';
+import { Component } from '@angular/core';
 
-// Servicio para obtener los datos de la API de Marvel
-import { MarvelService } from 'src/app/services/marvel.service';
 // Servicio para compartir los datos de los personajes
-import { DataService } from 'src/app/services/data.service';
 import { Router } from '@angular/router';
 
 
@@ -21,35 +12,16 @@ import { Router } from '@angular/router';
     templateUrl: './characters.component.html',
     styleUrls: ['./characters.component.sass']
 })
-export class CharactersComponent implements OnInit {
+export class CharactersComponent {
 
     // Variables para el título y subtítulo de la página
     title = 'In times of despair...';
     subtitle = 'Search for your destined saviour!';
-
-    // Observable para almacenar los personajes
-    //allCharacters?: Observable<Result[]> | any;
-
-    // Variable para almacenar los datos de un personaje obtenidor por la API
-    allHeroes: Observable<Result[]> = new Observable();
     heroId?: number;
-
-    // Opciones de la petición a la API
-    options!: MarvelRequestOptions;
-
-
-    // Manejador para las peticiones de búsqueda
-    searchValue: string = '';
 
 
     // Inyectamos los servicios para trabajar con los datos de la API y compartir los datos de los personajes
-    constructor(private marvelService: MarvelService, private dataService: DataService, private router: Router) { }
+    constructor(private router: Router) { }
 
-    // Método que se ejecuta al iniciar el componente
-    ngOnInit(): void {
-
-        // Obtenemos los datos del personaje seleccionado del componente hijo
-        this.allHeroes = this.dataService.getHero();
-    }
 
 }

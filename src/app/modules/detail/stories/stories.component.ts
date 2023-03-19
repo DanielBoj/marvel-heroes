@@ -1,3 +1,5 @@
+/* Implementa las funciones para buscar las 5 últimas historias en las que aparece un héroe */
+
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -5,17 +7,18 @@ import { Observable } from 'rxjs';
 // Importamos los modelos de interfaces
 import { Story } from 'src/app/core/interfaces/marvelStoriesResponse';
 
-// Servicio para realizar las llamadas a la API
-import { MarvelService } from 'src/app/services/marvel.service';
+// Importamos las interfaces
+import { Result } from 'src/app/core/interfaces/marvelResponseModel';
 
 // variables en entorno
 import { environment } from 'src/environments/environment';
 
 // Importamos el store de NgRx para el modelos reactivos
 import { Store } from '@ngrx/store';
-import { loadStoriesSuccess } from 'src/app/state/actions/heroes.actions';
+import { loadStories } from 'src/app/state/actions/heroes.actions';
 import { AppState } from 'src/app/state/app.state';
 import { selectHeroIdValue, selectListStories } from 'src/app/state/selectors/heroes.selectors';
+
 
 
 @Component({
@@ -37,15 +40,11 @@ export class StoriesComponent implements OnInit {
     typeSubt: string = 'Story Type';
 
     // Objeto para almacenar las historias
-    stories$: Observable<any> = new Observable();
+    stories$: Observable<Story[]> = new Observable();
 
     constructor(private activatedRoute: ActivatedRoute,
-        private marvelService: MarvelService,
         private router: Router,
         private store: Store<AppState>) {
-
-        // Capturamos el parámetro de la URL
-        //this.getIdFromParams();
     }
 
 
@@ -64,23 +63,16 @@ export class StoriesComponent implements OnInit {
 
     // Método para obtener las historias del héroe desde la API, almacenarlas en el store y cargarlas en el componente
     getStories = async (heroId: number) => {
-        // Cargamos las historias del héroe desde la API y las almacenamos en el store
-        await this.marvelService.getHeroStories(heroId).subscribe((stories: Story[]) => {
 
-            // Cargamos las historias en el store
-            this.store.dispatch(loadStoriesSuccess({ stories }));
-        })
+        // Cambiamos el tipo de dato
+        const idString = heroId.toString();
+
+        // Cargamos las historias del héroe desde la API y las almacenamos en el store
+        this.store.dispatch(loadStories({ id: idString }));
     }
 
     // Método para navegar a los datos json de la historia
     checkStory = (url: string) => {
         this.router.navigate([`${url}${this.url}`]);
     }
-
-    // // Método para obtener el ID del personaje de la URL
-    // getIdFromParams = () => {
-    //     this.activatedRoute.params.subscribe(params => {
-    //         this.heroId = params['id'];
-    //     })
-    // }
 }

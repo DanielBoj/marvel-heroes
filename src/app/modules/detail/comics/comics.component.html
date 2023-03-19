@@ -1,4 +1,14 @@
+<!-- Vista HTML para mostrar una caja de resultados con los cómics del personaje
+que, además, pueden ser filtrados por su tipo -->
 <main class="comics-section">
+    <div class="spinner-box" *ngIf="loading$ | async">
+        <mat-spinner
+            [diameter]="50"
+            [strokeWidth]="6"
+            color="accent"
+        ></mat-spinner>
+        <span class="spinner-text">Loading...</span>
+    </div>
     <section class="filter-box">
         <button
             class="search-button"
@@ -16,8 +26,9 @@
                 [formControl]="filter"
                 placeholder="filter"
                 value=""
-                (input)="onSearch($event)"
                 (keyup)="onFilter(filterInput.value)"
+                (input)="onSearch($event)"
+                (keyup.enter)="onSearch($event)"
                 (click)="onSearch($event)"
                 #filterInput
             />

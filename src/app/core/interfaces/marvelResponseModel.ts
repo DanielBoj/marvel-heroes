@@ -1,9 +1,4 @@
-/*
- * Esta interface define el modelo de la respuesta de la API de Marvel
- */
-
-import { Comic } from "./marvelComicResponse";
-import { Story } from "./marvelStoriesResponse";
+/* Esta interface define el modelo de la respuesta de la API de Marvel para los personajes */
 
 export interface Response {
     attributionHTML: string; // Atribución HTML
@@ -90,17 +85,3 @@ export enum URLType {
     Detail = 'detail',
     Wiki = 'wiki',
 }
-
-// export interface HeroData {
-//     id: number; // Identificador del elemento
-//     name: string; // Nombre del elemento
-//     description: string; // Descripción del elemento
-//     modified: Date | string; // Fecha de modificación
-//     thumbnail: string // Imagen del elemento
-//     resourceURI: string; // URL del elemento
-//     comics: Array<any>; // Comics en los que aparece el elemento
-//     series: Array<any>; // Series en las que aparece el elemento
-//     stories: Array<any>; // Historias en las que aparece el elemento
-//     events: Array<any>; // Eventos en los que aparece el elemento
-//     urls: string; // URLs del elemento
-// }

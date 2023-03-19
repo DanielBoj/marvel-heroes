@@ -13,6 +13,10 @@ import { PartialsModule } from '../components/partials/partials.module';
 // Módulos de Angular Material
 import { MaterialModule } from 'src/app/material/material.module';
 
+// NgRx
+import { StoreModule } from '@ngrx/store';
+import { ROOT_REDUCERS } from 'src/app/state/app.state';
+
 
 
 @NgModule({
@@ -24,7 +28,9 @@ import { MaterialModule } from 'src/app/material/material.module';
         RouterModule,
         MaterialModule,
         // Módulos personalizados
-        PartialsModule
+        PartialsModule,
+        // NgRx
+        StoreModule.forFeature('characters', ROOT_REDUCERS)
     ],
     exports: [
         CharactersComponent

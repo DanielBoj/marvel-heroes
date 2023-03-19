@@ -1,28 +1,26 @@
-/*
-* Este componente implementa la funcionalidad de búsqueda de personajes.
-* Usa los servicios de conexión a la API de Marvel y de compartir datos entre componentes.
-* Implementa lógica para el autocompletado de las opciones de búsqueda.
-* igualmente, pasa a los servicios de la API los parámetros opcionales para la búsqueda.
-*Para evitar saturar la API, solo re realizará la búsqueda al presionar el icono de búsqueda o enter.
-*/
+/* Este componente implementa la funcionalidad de búsqueda de personajes.
+
+Usa los servicios de conexión a la API de Marvel y de compartir datos entre componentes.
+
+Implementa lógica para el autocompletado de las opciones de búsqueda.
+igualmente, pasa a los servicios de la API los parámetros opcionales para la búsqueda.
+
+Para evitar saturar la API, solo re realizará la búsqueda al presionar el icono de búsqueda o enter. */
 
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs/operators';
+import { map, startWith } from 'rxjs/operators';
 
 // Formularios
 import { FormControl } from '@angular/forms';
 
-// Importamos los modelos de interfaces
-import { Result } from 'src/app/core/interfaces/marvelResponseModel';
 // Importamos el servicio para obtener los datos de los personajes
-import { DataService } from 'src/app/services/data.service';
 import { MarvelService } from 'src/app/services/marvel.service';
 
 // Importamos el store de NgRx para el modelos reactivos
-import { Store } from '@ngrx/store';
-import { loadNames, loadNamesSuccess, loadHero, loadHeroSuccess } from 'src/app/state/actions/heroes.actions';
-import { selectLoadingNames, selectListNames, selectHeroIdValue, selectHeroId, selectListHeroes } from 'src/app/state/selectors/heroes.selectors';
+import { Store, select } from '@ngrx/store';
+import * as heroesActions from 'src/app/state/actions/heroes.actions';
+import * as heroesSelectors from 'src/app/state/selectors/heroes.selectors';
 import { AppState } from 'src/app/state/app.state';
 
 @Component({
@@ -44,50 +42,29 @@ export class SearchComponent implements OnInit {
     search: FormControl = new FormControl();
 
     // Observable para almacenar los datos del personaje retornados por la API
-    hero$: Observable<readonly Result[]> = new Observable();
-    heroId$: Observable<number> = new Observable();
+    hero$: Observable<any> = new Observable();
+    heroId: number = 0;
 
     // Carga de datos
     loading$: Observable<boolean> = new Observable();
 
-    // Controlamos el incio de las llamadas a la API
-    //private subjectKeyDown = new Subject<any>();
 
-    //TODO: Eliminar dataservice
-    constructor(private marvelService: MarvelService,
-        private dataService: DataService,
-        private store: Store<AppState>) { }
+    constructor(private store: Store<AppState>) {
+
+        // Cargamos la id del último personaje seleccionado
+        this.setHeroId();
+
+        // Cargamos los datos del último personaje seleccionado
+        this.checkHero();
+    }
 
     ngOnInit(): void {
 
-        // // Obtenemos los nombres de los personajes
-        // this.getNames();
-
         // Carga de estados iniciales
-        this.loading$ = this.store.select(selectLoadingNames);
+        this.loading$ = this.store.select(heroesSelectors.selectLoadingNames);
 
-        // Obtenmos la lista de nombres
+        // Obtenemos la lista de nombres
         this.getNames();
-        // Obtenemos los nombres de los personajes a través del store
-        this.store.dispatch(loadNames());
-
-        // Cargamos la id del último personaje seleccionado
-        this.heroId$ = this.store.select(selectHeroIdValue);
-
-        // Obtenemos los datos del personaje seleccionado
-        this.getHeroById(Number(this.heroId$));
-        this.hero$ = this.store.select(selectListHeroes);
-
-        // Obtenemos los datos del personaje seleccionado del componente hijo
-        if (this.dataService.getHeroId()) {
-
-            // Obtenemos el ID del personaje
-            this.heroId$ = this.dataService.getHeroId();
-
-            // Obtenemos los datos del personaje
-            this.getHeroById(Number(this.heroId$));
-        }
-
 
         // Filtramos los nombres de los personajes
         this.filteredNames = this.search.valueChanges
@@ -102,29 +79,30 @@ export class SearchComponent implements OnInit {
         // Convertimos el valor a minúsculas para que no haya problemas con los nombres introducidos por el usuario
         const filterValue = value.toLowerCase();
 
-        // // Filtramos los nombres de los personajes
+        // Filtramos los nombres de los personajes
         return this.namesOpt.filter(option => option.toLowerCase().includes(filterValue));
 
     }
 
     /* Métodos */
     // Método para obtener los nombres de los héroes a través del servicio de Marvel
+    // Como la respuesta está limitada a 100 resultados, se realiza una llamada a la API por cada 100 resultados definiendo un offset para no cargar datos respetidos hasta llegar al límite de 1562 personajes
     getNames = () => {
         // Controlamos el inicio de la llamada a la API
         let count: number = 0;
 
-        while (count < 100 /*this.limit*/) {
+        while (count < this.limit) {
             // Obtenemos los nombres de los héroes
-            //this.store.dispatch(loadNamesSuccess());
-            this.marvelService.getAllNames(count.toString()).subscribe((names: string[]) => {
+            const countAsString = count.toString();
+            // Cargamos los nombres en el store
+            this.store.dispatch(heroesActions.loadNames({ offset: countAsString }));
 
-                // Añadimos los nombres de los personajes al store
-                this.store.dispatch(loadNamesSuccess({ names: names }));
-
-                // Añadimos los nombres de los personajes al array
+            // Obtenemos los nombres de los personajes a través del store
+            this.store.select(heroesSelectors.selectListNames).subscribe((names: string[]) => {
                 this.namesOpt = this.namesOpt.concat(names as string[]);
             });
 
+            // Actualizamos el contador para definir el offset de las llamadas recurrentes
             count += 100;
         }
     }
@@ -132,11 +110,11 @@ export class SearchComponent implements OnInit {
     // Método para obtener un héroe en concreto a través del servicio de Marvel refiriendo su ID
     getHeroById = async (id: number) => {
         if (id > 0) {
-            this.hero$ = await this.marvelService.getHeroById(id)
-                .subscribe((hero: any) => {
-                    // Añadimos los datos del personaje al store
-                    this.store.dispatch(loadHeroSuccess({ heroes: hero }));
-                });
+            // Cargamos los datos al store
+            const idString: string = id.toString();
+            this.store.dispatch(heroesActions.loadHeroById({ id: idString })),
+                // Obtenemos los datos del personaje
+                this.hero$ = this.store.select(heroesSelectors.selectHeroId);
         } else {
             return;
         }
@@ -145,9 +123,9 @@ export class SearchComponent implements OnInit {
     // Método para dinamizar el filtrado de los nombres de los personajes
     onFilter = (name: string) => {
         if (name !== '') {
+
             // Actualizamos el valor del input de búsqueda a través del controlador
             name.toLowerCase();
-            //this.subjectKeyDown.next(name);
         } else {
             return;
         }
@@ -166,25 +144,25 @@ export class SearchComponent implements OnInit {
         // Si el usuario selecciona un nombre de la lista de sugerencias, realiza la búsqueda al presionar el icono de búsqueda
         // Si el usuario presiona enter, realiza la búsqueda
         if (name !== undefined) {
-            return this.marvelService.getHero(name)
-                .pipe((
-                    debounceTime(600)),
-                    distinctUntilChanged(),
-                ).subscribe((hero: Result[]) => {
-
-                    // Cargamos la información en el store
-                    this.store.dispatch(loadHeroSuccess({ heroes: hero }));
-                });
+            this.store.dispatch(heroesActions.loadHero({ name: name }));
         } else {
-            return this.marvelService.getHero(event.target.value)
-                .pipe((
-                    debounceTime(600)),
-                    distinctUntilChanged(),
-                ).subscribe((hero: Result[]) => {
+            this.store.dispatch(heroesActions.loadHero({ name: event.target.value }));
+        }
+    }
 
-                    // Enviamos la información al store
-                    this.store.dispatch(loadHeroSuccess({ heroes: hero }));
-                });
+    // Método para cargar la id del héroe desde el store
+    setHeroId = () => {
+
+        //Obtenemos el valor del store
+        this.store.select(heroesSelectors.selectHeroIdValue).forEach((heroId: number) => this.heroId = heroId);
+    }
+
+    // Comprobamos si existe un personaje seleccionado y lo cargamos
+    checkHero = () => {
+        if (this.heroId > 0) {
+            this.getHeroById(this.heroId);
+        } else {
+            return;
         }
     }
 }
