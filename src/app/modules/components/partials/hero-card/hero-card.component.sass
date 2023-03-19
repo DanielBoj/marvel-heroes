@@ -1,35 +1,49 @@
 // Imports
 @use "/src/app/styles/variables" as root
 
-.hero-card
-    z-index: 888
-    background-color: root.$background-dark-medium-color
-    min-height: 50vh
-    padding: 1rem 4rem
-    border: root.$card-border
-    h2
-        color: root.$font-rose-color
-        font-size: 2rem
-        font-weight: 600
-        margin-bottom: 1rem
-    h3
-        color: root.$font-rose-color
-        font-size: 1.5rem
-        font-weight: 600
-        margin-bottom: 1rem
-    .mat-mdc-card-header
-        border-bottom: 0.3rem solid root.$border-rose-color
-        margin-bottom: 1.5rem
-    .hero-image
-        max-width: 20rem
-        height: auto
-        object-fit: cover
-    .mat-mdc-card-content
-        padding: 1rem
-        .content
-            padding: 0rem 0.5rem
-            line-height: 1.5rem
-    .get-button
-        background-color: root.$background-light-color
-        color: root.$font-high-dark-color
-        box-shadow: root.$box-shadow
+.hero-card-container
+    width: 100%
+
+    .hero-card
+        min-height: 30vh
+        padding: 1rem 1rem
+        border: 0.2rem solid #ffffff05
+        z-index: 888
+
+    mat-card
+        background-color: root.$background-dark-color
+        font-size: 0.9rem
+        .img-box
+            max-width: 20rem
+            max-height: 15rem
+            margin: 1rem 0
+            overflow: hidden
+            .hero-img
+                display: flex
+                justify-self: center
+                align-self: center
+                max-width: 20rem
+                height: auto
+        mat-card-header
+                justify-self: center
+                width: 100%
+                color: root.$font-light-color
+                border-bottom: 0.2rem solid root.$border-light-color
+
+        mat-card-content
+
+        h2
+            color: root.$font-rose-color
+            font-size: 1.5rem
+            font-weight: 600
+            margin-bottom: 1rem
+        h3
+            color: root.$font-rose-color
+            font-size: 1.2rem
+            font-weight: 600
+            margin-bottom: 1rem
+
+        .get-button
+            background-color: root.$background-light-color
+            color: root.$font-high-dark-color
+            box-shadow: root.$box-shadow

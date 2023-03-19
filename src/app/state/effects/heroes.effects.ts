@@ -14,7 +14,7 @@ export class HeroEffects {
     // Efecto para cargar la lista de nombres de héroes
     loadNames$ = createEffect(() => this.actions$.pipe(
         ofType('[Search] Load names'),
-        mergeMap(({ offset: offset }) => this.marvelService.getAllNames(offset)
+        mergeMap(({ name: name }) => this.marvelService.getName(name)
             .pipe(
                 map(names => ({ type: '[Search] Load names success', names })),
                 catchError(() => EMPTY)

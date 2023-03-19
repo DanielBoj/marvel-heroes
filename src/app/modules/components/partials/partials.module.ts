@@ -28,6 +28,9 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { StoreModule } from '@ngrx/store';
 import { ROOT_REDUCERS } from 'src/app/state/app.state';
 
+// Gestión del flex
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 
 
 @NgModule({
@@ -47,7 +50,8 @@ import { ROOT_REDUCERS } from 'src/app/state/app.state';
         LayoutModule,
         ReactiveFormsModule,
         FormsModule,
-        StoreModule.forFeature('partials', ROOT_REDUCERS)
+        StoreModule.forFeature('partials', ROOT_REDUCERS),
+        FlexLayoutModule,
     ],
     exports: [
         BannerComponent,

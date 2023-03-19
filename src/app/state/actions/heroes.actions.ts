@@ -9,7 +9,7 @@ import { Story } from "src/app/core/interfaces/marvelStoriesResponse";
 // Acciones para la carga de los nombres de los héroes
 export const loadNames = createAction(
     '[Search] Load names',
-    props<{ offset: string }>()
+    props<{ name: string }>()
 );
 
 export const loadNamesSuccess = createAction(
@@ -20,6 +20,11 @@ export const loadNamesSuccess = createAction(
 export const loadNamesError = createAction(
     '[Search] Load names error',
     props<{ payload: any }>()
+);
+
+export const clearNames = createAction(
+    '[Search] Clear names',
+    props<{ names: string[] }>()
 );
 
 

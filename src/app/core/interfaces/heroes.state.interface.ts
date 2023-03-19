@@ -4,7 +4,6 @@ import { Comic } from "./marvelComicResponse";
 import { Story } from "./marvelStoriesResponse";
 
 export interface NamesState {
-    loading: boolean,
     names: Array<string>,
 };
 

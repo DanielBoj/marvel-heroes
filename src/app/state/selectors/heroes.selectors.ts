@@ -1,7 +1,7 @@
 /* Implementa las funciones para recuperar la información almacenada en el store */
 
 // Imports para manejar el estado de la aplicación
-import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { createSelector } from '@ngrx/store';
 
 // Imports de modelos de interfaces
 import { AppState } from '../app.state';
@@ -13,11 +13,6 @@ export const selectNames = (state: AppState) => state.names;
 export const selectListNames = createSelector(
     selectNames,
     (state) => state.names
-);
-
-export const selectLoadingNames = createSelector(
-    selectNames,
-    (state) => state.loading
 );
 
 // Selector para cargar la lista de héroes
@@ -44,7 +39,7 @@ export const selectListComicsById = createSelector(
 );
 
 export const selectLoadingComics = createSelector(
-    selectNames,
+    selectComics,
     (state) => state.loading
 );
 

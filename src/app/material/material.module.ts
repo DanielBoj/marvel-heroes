@@ -15,6 +15,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
 
 
 const matModules = [
@@ -30,6 +31,7 @@ const matModules = [
     MatAutocompleteModule,
     MatTabsModule,
     MatProgressSpinnerModule,
+    MatSelectModule,
 ]
 
 

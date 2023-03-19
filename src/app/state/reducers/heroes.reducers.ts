@@ -6,11 +6,11 @@ import * as heroesActions from '../actions/heroes.actions';
 
 // Imports de modelos de interfaces
 import * as heroesInterfaces from 'src/app/core/interfaces/heroes.state.interface';
+import { of } from 'rxjs';
 
 
 // Estados iniciales de la aplicación
 export const initialState: heroesInterfaces.NamesState = {
-    loading: false,
     names: [],
 }
 
@@ -19,7 +19,7 @@ export const heroState: heroesInterfaces.HeroState = {
 }
 
 export const comicsState: heroesInterfaces.ComicsState = {
-    loading: false,
+    loading: true,
     comics: [],
 }
 
@@ -41,10 +41,15 @@ export const heroUrlState: heroesInterfaces.HeroUrlState = {
 export const namesReducer = createReducer(
     initialState,
     on(heroesActions.loadNames, (state) => ({ ...state, loading: true })),
+    on(heroesActions.clearNames, (state) => {
+        return {
+            ...state,
+            names: []
+        }
+    }),
     on(heroesActions.loadNamesSuccess, (state, nameList) => {
         return {
             ...state,
-            loading: false,
             names: nameList.names
         }
     }),

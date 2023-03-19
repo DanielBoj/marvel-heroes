@@ -10,55 +10,31 @@ que, además, pueden ser filtrados por su tipo -->
         <span class="spinner-text">Loading...</span>
     </div>
     <section class="filter-box">
-        <button
-            class="search-button"
-            mat-icon-button
-            class="search-button"
-            (click)="onSearch(filterInput.value)"
-        >
+        <h2 class="filter-subt">{{ filterSubt }}</h2>
+        <span mat-icon-button>
             <mat-icon color="accent" class="glass-icon">search</mat-icon>
-        </button>
+        </span>
         <mat-form-field class="search-field" color="accent">
-            <input
-                type="text"
-                matInput
-                [matAutocomplete]="auto"
-                [formControl]="filter"
-                placeholder="filter"
-                value=""
-                (keyup)="onFilter(filterInput.value)"
-                (input)="onSearch($event)"
-                (keyup.enter)="onSearch($event)"
-                (click)="onSearch($event)"
-                #filterInput
-            />
-            <mat-autocomplete
-                #auto="matAutocomplete"
-                [displayWith]="showFilter"
-            >
+            <mat-select>
+                <mat-label>{{ selectLabel }}</mat-label>
                 <mat-option
-                    *ngFor="let option of filteredOpts$ | async"
-                    [value]="option"
+                    *ngFor="let opt of filterOpts"
+                    (click)="onSearch(opt)"
+                    >{{ opt }}</mat-option
                 >
-                    {{ option }}
-                </mat-option>
-            </mat-autocomplete>
+            </mat-select>
         </mat-form-field>
     </section>
-    <section fxFlex fxLayout="column" class="layout-box">
+    <section class="layout-box" fxFlex fxLayout="column">
         <div class="no-results" *ngIf="areNoResults">
             <h1>Sorry, there are no results for this type of comic.</h1>
         </div>
-        <article
-            fxLayout="row wrap"
-            class="comic-wrapper"
-            *ngIf="!areNoResults"
-        >
+        <div fxLayout="row wrap" class="comic-wrapper" *ngIf="!areNoResults">
             <div
-                fxFlex="50"
-                fxFlex.md="50"
-                fxFlex.sm="100"
-                fxFlex.xs="100"
+                fxFlex="50%"
+                fxFlex.md="50%"
+                fxFlex.sm="100%"
+                fxFlex.xs="100%"
                 fxLayout="column"
                 class="comic-box"
                 *ngFor="let comic of comics$ | async"
@@ -90,6 +66,6 @@ que, además, pueden ser filtrados por su tipo -->
                     </mat-card-actions>
                 </mat-card>
             </div>
-        </article>
+        </div>
     </section>
 </main>

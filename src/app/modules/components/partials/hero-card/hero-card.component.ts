@@ -16,10 +16,12 @@ import { selectListHeroes } from 'src/app/state/selectors/heroes.selectors';
 })
 export class HeroCardComponent implements OnInit {
 
+    // Almacena la lista de héroes a mostrar
     allHeroes$: Observable<any> = new Observable();
 
-    subDescript: string = 'Biography';
-    subAparicion: string = 'Last Appearance';
+    // Títulos
+    subt: string = 'Last Modified';
+    button: string = 'Get Details';
 
     constructor(private store: Store<AppState>) { }
 

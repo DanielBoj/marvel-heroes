@@ -10,11 +10,7 @@
     </div>
     <mat-grid-list cols="8" rowHeight="15vh">
         <mat-grid-tile class="search-field" colspan="1">
-            <button
-                mat-icon-button
-                class="search-button"
-                (click)="onChange($event, searchInput.value)"
-            >
+            <button mat-icon-button class="search-button">
                 <mat-icon color="accent" class="glass-icon">search</mat-icon>
             </button>
         </mat-grid-tile>
@@ -25,19 +21,13 @@
                     type="text"
                     matInput
                     placeholder="search"
-                    value=""
                     name="name"
                     [matAutocomplete]="auto"
-                    [formControl]="search"
-                    autocomplete="off"
-                    (keyup)="onFilter(searchInput.value)"
-                    (input)="onChange($event)"
-                    (keydown.enter)="onChange($event)"
-                    #searchInput
+                    (input)="onSearch($event)"
                 />
-                <mat-autocomplete #auto="matAutocomplete" s>
+                <mat-autocomplete #auto="matAutocomplete">
                     <mat-option
-                        *ngFor="let name of filteredNames | async"
+                        *ngFor="let name of namesOpt$ | async"
                         [value]="name"
                         >{{ name }}</mat-option
                     >

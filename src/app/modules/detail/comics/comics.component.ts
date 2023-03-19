@@ -1,10 +1,8 @@
 /* Implementa las funcionalidades para cargar y mostrar los cómics protagonizados por un personaje y para poderlos filtrar por tipo. */
 
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
 
 // Interfaces
 import { Comic } from 'src/app/core/interfaces/marvelComicResponse';
@@ -39,10 +37,6 @@ export class ComicsComponent implements OnInit {
     // Gestión del filtrado de cómics
     // Lista de los valores de filtrado permitidos
     filterOpts: string[] = [];
-    filteredOpts$: Observable<string[]> = new Observable();
-
-    // Controlador para el input de filtrado
-    filter: FormControl = new FormControl('');
 
     // Objeto para almacenar los cómics
     comics$: Observable<Comic[]> = new Observable();
@@ -52,7 +46,9 @@ export class ComicsComponent implements OnInit {
     // Carga de estados iniciales
     loading$: Observable<boolean> = new Observable();
 
-
+    // Texto fijo
+    selectLabel: string = 'Comics Types';
+    filterSubt: string = 'Filter by comic type'
 
     constructor(
         private router: Router,
@@ -70,20 +66,12 @@ export class ComicsComponent implements OnInit {
         // Cargamos el Id del héroe dsesde el store. Hay que parsearlo para poderlo usar
         this.setHeroId();
 
-        // Para que no se filtre nada al cargar la página
-        this.filter.defaultValue;
 
         // Cargamos los cómics
         if (this.heroId !== 0) {
             this.getComics(this.heroId);
         }
         this.comics$ = this.store.select(heroesSelectors.selectListComics);
-
-        // Filtramos los valores de filtrado
-        this.filteredOpts$ = this.filter.valueChanges.pipe(
-            startWith(''),
-            map(value => this._filter(value))
-        );
     }
 
     /* Controlador */
@@ -96,7 +84,6 @@ export class ComicsComponent implements OnInit {
     }
 
     /* Métodos */
-
     // Método para obtener todos los cómics relacionados con un héroe a través de la id de este llamando a la API
     getComics = async (heroId: number) => {
 
@@ -127,26 +114,14 @@ export class ComicsComponent implements OnInit {
         return opt ? opt : '';
     }
 
-    // Método para controlar el valor de filtrado para obtener los cómics según este
-    onFilter = (filter: string) => {
-        if (filter === '') {
-            return;
-        }
-
-        // Obtenemos el filtro
-        filter.toLowerCase();
-    }
-
     // Método para actualizar el valor de filtrado y obtener los cómics según este
-    onSearch = (event: any) => {
-        // Obtenemos el filtro en minúsculas para evitar errores
-        event.target.value.toLowerCase();
+    onSearch = (opt: string) => {
 
         // Realizamos la carga de datos en el motor de busqueda: Si el filtro es none o vacío, cargamos todos los cómics
-        if (this.filterOpts.includes(event.target.value) && event.target.value !== 'none') {
+        if (this.filterOpts.includes(opt) && opt !== 'none') {
 
             // Llamamos a la API y cargamos los datos en el store
-            this.getFilteredComics(this.heroId, event.target.value);
+            this.getFilteredComics(this.heroId, opt);
 
             // Obtenemos el resultado de la store
             this.comics$ = this.store.select(heroesSelectors.selectListComics);

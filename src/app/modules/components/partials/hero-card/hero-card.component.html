@@ -1,37 +1,45 @@
 <!-- Vista HTML para mostrar un componente tipo card con los datos del personaje. -->
-<ng-container class="character-card-container" *ngIf="allHeroes$">
-    <ng-container *ngFor="let hero of allHeroes$ | async">
-        <mat-card class="hero-card">
-            <mat-card-header>
-                <mat-card-title>
-                    <h2 class="mat-title">{{ hero.name }}</h2>
-                </mat-card-title>
-            </mat-card-header>
-            <img
-                mat-card-image
-                class="hero-image"
-                src="{{ hero.thumbnail.path }}.{{ hero.thumbnail.extension }}"
-                alt="Image of {{ hero.name }}"
-            />
-            <mat-card-content>
-                <h3 class="mat-subhead">{{ subDescript }}</h3>
-                <p class="content">
-                    {{ hero.description }}
-                </p>
-                <h3 class="mat-subhead">{{ subAparicion }}</h3>
-                <p class="content">
-                    {{ hero.modified }}
-                </p>
-            </mat-card-content>
-            <mat-card-actions align="end">
-                <button
-                    mat-button
-                    class="get-button"
-                    routerLink="/character/{{ hero.id }}"
-                >
-                    Details
-                </button>
-            </mat-card-actions>
-        </mat-card>
-    </ng-container>
-</ng-container>
+<main class="hero-card-container" FxFlex fxLayout="column">
+    <section class="heroes-wrapper" fxLayout="row wrap" fxAlign="center center">
+        <div
+            class="hero-card"
+            FxLayout="column"
+            fxFlex="33%"
+            fxFlex.lg="25%"
+            fxFlex.md="33%"
+            fxFlex.sm="50%"
+            fxFlex.xs="100%"
+            *ngFor="let hero of allHeroes$ | async"
+        >
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>{{ hero.name }}</mat-card-title>
+                </mat-card-header>
+
+                <span class="img-box">
+                    <img
+                        class="hero-img"
+                        src="{{ hero.thumbnail.path }}.{{
+                            hero.thumbnail.extension
+                        }}"
+                        alt="Image of {{ hero.name }}"
+                    />
+                </span>
+
+                <mat-card-content>
+                    <h2>{{ subt }}</h2>
+                    <p>{{ hero.modified }}</p>
+                </mat-card-content>
+                <mat-card-actions align="end">
+                    <button
+                        mat-button
+                        class="get-button"
+                        routerLink="/character/{{ hero.id }}"
+                    >
+                        {{ button }}
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </section>
+</main>
